@@ -1,4 +1,6 @@
 package Controller;
+import java.awt.BorderLayout;
+
 import Model.Model;
 import Model.Stay;
 import View.View;
@@ -24,12 +26,6 @@ public class Controller {
     private RatingsPageGUI ratingsPageGUI;
     private SearchPageGUI searchPageGUI;
     private Model model;
-
-
-
-    public Controller (){
-
-    }
 
     public void setView(View view){
         this.view = view;
@@ -67,14 +63,25 @@ public class Controller {
         this.ratingsPageGUI = ratingsPageGUI;
     }
 
-    public void setSearchPageGui(SearchPageGUI searchPageGUI){
+    public void setSearchPageGUI(SearchPageGUI searchPageGUI){
         this.searchPageGUI = searchPageGUI;
     }
 
-    public int getWindowWidth(){
-        return view.getWidth();
+    public void setModel(Model model){
+        this.model = model;
     }
 
+    public int getWindowWidth(){
+        return this.view.getWidth();
+    }
+
+    public void start(){
+        System.out.println(view.getLayout());
+        view.getContentPane().add(this.homePageGUI, BorderLayout.CENTER);
+        this.homePageGUI.start();
+        view.revalidate();
+        view.repaint();
+    }
 
 
 }

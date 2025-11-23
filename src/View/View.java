@@ -27,7 +27,7 @@ public class View extends JFrame{
     
     public View(Controller controller){
         this.controller = controller;
-        
+    
         this.guestPageGui = new GuestPageGUI(this.controller);
         this.issuePageGUI = new IssuePageGUI(this.controller);
         this.stayPageGUI = new StayPageGUI(this.controller);
