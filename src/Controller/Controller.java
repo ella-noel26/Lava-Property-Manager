@@ -75,6 +75,10 @@ public class Controller {
         return this.view.getWidth();
     }
 
+    public int getWindowHeight(){
+        return this.view.getHeight();
+    }
+
     public void start(){
         System.out.println(view.getLayout());
         view.getContentPane().add(this.homePageGUI, BorderLayout.CENTER);
