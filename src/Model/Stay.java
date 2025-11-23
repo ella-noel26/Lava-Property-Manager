@@ -1,8 +1,4 @@
 package Model;
-<<<<<<< HEAD
-=======
-import java.lang.reflect.Array;
->>>>>>> de5864478ff3f0af2c3ae4ed0d881006c6013201
 import java.util.ArrayList;
 
 public class Stay {
