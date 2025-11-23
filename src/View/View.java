@@ -1,6 +1,7 @@
 package View;
 import javax.swing.JFrame;
 
+import Controller.Controller;
 import View.Pages.Objects.GuestPageGUI;
 import View.Pages.Objects.IssuePageGUI;
 import View.Pages.Objects.StayPageGUI;
@@ -21,18 +22,21 @@ public class View extends JFrame{
     private IssuesPageGUI issuesPageGUI;
     private RatingsPageGUI ratingsPageGUI;
     private SearchPageGUI searchPageGUI;
+    private Controller controller;
     
     
-    public View(){
-        this.guestPageGui = new GuestPageGUI();
-        this.issuePageGUI = new IssuePageGUI();
-        this.stayPageGUI = new StayPageGUI();
-        this.calendarPageGUI = new CalendarPageGUI();
-        this.createPageGUI = new CreatePageGUI();
-        this.homePageGUI = new HomePageGUI();
-        this.issuesPageGUI = new IssuesPageGUI();
-        this.ratingsPageGUI = new RatingsPageGUI();
-        this.searchPageGUI = new SearchPageGUI();
+    public View(Controller controller){
+        this.controller = controller;
+        
+        this.guestPageGui = new GuestPageGUI(this.controller);
+        this.issuePageGUI = new IssuePageGUI(this.controller);
+        this.stayPageGUI = new StayPageGUI(this.controller);
+        this.calendarPageGUI = new CalendarPageGUI(this.controller);
+        this.createPageGUI = new CreatePageGUI(this.controller);
+        this.homePageGUI = new HomePageGUI(this.controller);
+        this.issuesPageGUI = new IssuesPageGUI(this.controller);
+        this.ratingsPageGUI = new RatingsPageGUI(this.controller);
+        this.searchPageGUI = new SearchPageGUI(this.controller);
         
         this.setTitle("Lava Property Manager");
         this.setBounds(100, 100, 1500, 1000);

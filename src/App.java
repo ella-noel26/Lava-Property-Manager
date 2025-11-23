@@ -5,12 +5,12 @@ import Model.Model;
 import View.View;
 public class App {
     public static void main(String[] args) throws Exception {
-        Model model = new Model();
-        View view = new View();
-        Controller controller = new Controller(view, view.getGuestPageGUI(), view.getIssuePageGUI(), 
-        view.getStayPageGUI(), view.getCalendarPageGUI(), view.getCreatePageGUI(), view.getHomePageGUI(),
-        view.getIssuesPageGUI(), view.getRatingsPageGUI(), view.getSearchPageGUI(), model);
+        Controller controller = new Controller();
+        Model model = new Model(controller);
+        View view = new View(controller);
+        
 
+        System.out.println(controller.getWindowWidth());
         System.out.println("Hello, World!");
     }
 }

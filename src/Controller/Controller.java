@@ -1,5 +1,6 @@
 package Controller;
 import Model.Model;
+import Model.Stay;
 import View.View;
 import View.Pages.Objects.GuestPageGUI;
 import View.Pages.Objects.IssuePageGUI;
@@ -24,11 +25,54 @@ public class Controller {
     private SearchPageGUI searchPageGUI;
     private Model model;
 
-    public Controller (View view, GuestPageGUI guestPageGui, IssuePageGUI issuePageGUI,
-                       StayPageGUI stayPageGUI, CalendarPageGUI calendarPageGUI, CreatePageGUI createPageGUI,
-                       HomePageGUI homePageGUI, IssuesPageGUI issuesPageGUI, RatingsPageGUI ratingsPageGUI, 
-                       SearchPageGUI searchPageGUI, Model model){
 
+
+    public Controller (){
+
+    }
+
+    public void setView(View view){
+        this.view = view;
+    }
+
+    public void setGuestPageGui(GuestPageGUI guestPageGUI){
+        this.guestPageGui = guestPageGUI;
+    }
+
+    public void setIssuePageGUI(IssuePageGUI issuePageGUI){
+        this.issuePageGUI = issuePageGUI;
+    }
+
+    public void setStayPageGUI(StayPageGUI stayPageGUI){
+        this.stayPageGUI = stayPageGUI;
+    }
+
+    public void setCalendarPageGUI(CalendarPageGUI calendarPageGUI){
+        this.calendarPageGUI = calendarPageGUI;
+    }
+
+    public void setCreatePageGUI(CreatePageGUI createPageGUI){
+        this.createPageGUI = createPageGUI;
+    }
+
+    public void setHomePageGUI(HomePageGUI homePageGUI){
+        this.homePageGUI = homePageGUI;
+    }
+
+    public void setIssuesPageGUI(IssuesPageGUI issuesPageGUI){
+        this.issuesPageGUI = issuesPageGUI;
+    }
+
+    public void setRatingsPageGUI(RatingsPageGUI ratingsPageGUI){
+        this.ratingsPageGUI = ratingsPageGUI;
+    }
+
+    public void setSearchPageGui(SearchPageGUI searchPageGUI){
+        this.searchPageGUI = searchPageGUI;
+    }
+
+    public int getWindowWidth(){
+        return view.getWidth();
     }
 
 

@@ -1,5 +1,8 @@
 package Model;
 import com.google.gson.Gson;
+
+import Controller.Controller;
+
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -10,7 +13,9 @@ import java.util.Scanner;
 
 
 public class Model {
-    public Model(){
+    private Controller controller;
+    public Model(Controller controller){
+        this.controller = controller;
         Gson gson = new Gson();
         Guest guest = new Guest("Ella", "Frandsen", 3852991133l, "ella.n.frandsen@gmail.com");
         Issue issue = new Issue("Toilet Broken", new int[]{5,17,2015}, new int[]{5,15,2015}, "Jerry broke the toilet");
