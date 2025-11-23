@@ -1,10 +1,15 @@
 package Model;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Stay {
     private int[] startDate;
     private int[] endDate;
-    double price;
-    int location; //Lodge is 1, bunkhouse is 2
+    private double price;
+    private int location; //Lodge is 1, bunkhouse is 2
+    private ArrayList<Issue> childrenIssues;
+    private ArrayList<Guest> parentGuests;
+
 
     public Stay(int[] arrivalDate, int[] leaveDate, double pricePaid, int place){
         this.startDate = new int[arrivalDate.length];
@@ -20,6 +25,38 @@ public class Stay {
         this.price = pricePaid;
         
         this.location = place;
+
+        this.childrenIssues = new ArrayList<>();
+
+        this.parentGuests = new ArrayList<>();
+    }
+
+    public ArrayList<Issue> getChildrenIssues(){
+        return this.childrenIssues;
+    }
+
+    public void addChildIssue(Issue issue){
+        this.childrenIssues.add(issue);
+    }
+
+    public void addChildrenIssues(ArrayList<Issue> issues){
+        for (Issue issue : issues){
+            this.childrenIssues.add(issue);
+        }
+    }
+
+    public ArrayList<Guest> getParentGuests(){
+        return this.parentGuests;
+    }
+
+    public void addParentGuest (Guest guest){
+        this.parentGuests.add(guest);
+    }
+
+    public void addParentGuests(ArrayList<Guest> guests){
+        for (Guest guest : guests){
+            this.parentGuests.add(guest);
+        }
     }
 
     public int[] getStartDate(){

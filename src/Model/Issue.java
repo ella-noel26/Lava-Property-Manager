@@ -1,4 +1,5 @@
 package Model;
+import java.util.ArrayList;
 
 public class Issue {
     private int[] reportedDate;
@@ -6,6 +7,7 @@ public class Issue {
     private int[] resolvedDate;
     private String description;
     private String title;
+    private ArrayList<Stay> parentStays;
 
     public Issue(String name, int[] reportDate, int[] startDate, int[] resolveDate, String desc){
         this.title = name;
@@ -26,6 +28,8 @@ public class Issue {
         }
 
         this.description = desc;
+
+        parentStays = new ArrayList<>();
     }
 
     public String getTitle(){
@@ -71,6 +75,20 @@ public class Issue {
     public void setResolvedDate(int[] date){
         for (int index = 0; index < date.length; index++){
             this.resolvedDate[index] = date[index];
+        }
+    }
+
+    public ArrayList<Stay> getParentStays(){
+        return this.parentStays;
+    }
+
+    public void addParentStay(Stay stay){
+        this.parentStays.add(stay);
+    }
+
+    public void addParentStays(ArrayList<Stay> parents){
+        for (Stay parent : parents){
+            this.parentStays.add(parent);
         }
     }
 }
