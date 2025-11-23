@@ -83,5 +83,9 @@ public class Controller {
         view.repaint();
     }
 
+    public void pack(){
+        this.view.pack();
+    }
+
 
 }
