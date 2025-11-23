@@ -7,7 +7,7 @@ public class Stay {
     private double price;
     private int location; //Lodge is 1, bunkhouse is 2
     private ArrayList<Issue> childrenIssues;
-    private ArrayList<Guest> parentGuests;
+    private transient ArrayList<Guest> parentGuests;
 
 
     public Stay(int[] arrivalDate, int[] leaveDate, double pricePaid, int place){

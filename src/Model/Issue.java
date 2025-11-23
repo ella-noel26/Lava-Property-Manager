@@ -7,9 +7,9 @@ public class Issue {
     private int[] resolvedDate;
     private String description;
     private String title;
-    private ArrayList<Stay> parentStays;
+    private transient ArrayList<Stay> parentStays;
 
-    public Issue(String name, int[] reportDate, int[] startDate, int[] resolveDate, String desc){
+    public Issue(String name, int[] reportDate, int[] startDate, String desc){
         this.title = name;
         
         this.reportedDate = new int[reportDate.length];
@@ -22,14 +22,19 @@ public class Issue {
             this.startedDate[index] = startDate[index];
         }
 
+        this.description = desc;
+
+        parentStays = new ArrayList<>();
+    }
+    
+    public Issue(String name, int[] reportDate, int[] startDate, int[] resolveDate, String desc){
+        this(name, reportDate, startDate, desc);
+
         this.resolvedDate = new int[resolveDate.length];  
         for (int index = 0; index < resolveDate.length; index++){
             this.resolvedDate[index] = resolveDate[index];
         }
 
-        this.description = desc;
-
-        parentStays = new ArrayList<>();
     }
 
     public String getTitle(){
