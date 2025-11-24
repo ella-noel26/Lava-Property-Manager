@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 public class Model {
     private Controller controller;
+    private ArrayList<Guest> listOfGuests;
     public Model(Controller controller){
         this.controller = controller;
         Gson gson = new Gson();
@@ -26,7 +27,7 @@ public class Model {
         guest.addChildStay(stay);
 
         Guest guestTwo = new Guest("Jerry", "Zheng", 3852991100l, "jerry.zhend@gmail.com");
-        ArrayList<Guest> listOfGuests = new ArrayList<>();
+        listOfGuests = new ArrayList<>();
         listOfGuests.add(guest);
         listOfGuests.add(guestTwo);
         //String ellaJson = gson.toJson(guest);
@@ -53,9 +54,9 @@ public class Model {
         try (Scanner reader = new Scanner(new File("data.json"))){
             while (reader.hasNextLine()){
                 String dataFromFile = reader.nextLine();
-                //System.out.println(dataFromFile);
-                //Guest fromJsonExample = gson.fromJson(dataFromFile, Guest.class);
-                //System.out.println(fromJsonExample.getEmail());
+                System.out.println(dataFromFile + "printing");
+                Guest[] fromJsonExample = gson.fromJson(dataFromFile, Guest[].class);
+                System.out.println(fromJsonExample[0].getEmail());
             }
         }
         catch (IOException error){

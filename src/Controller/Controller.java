@@ -1,5 +1,6 @@
 package Controller;
 import java.awt.BorderLayout;
+import java.util.Stack;
 
 import Model.Model;
 import Model.Stay;
@@ -26,7 +27,13 @@ public class Controller {
     private RatingsPageGUI ratingsPageGUI;
     private SearchPageGUI searchPageGUI;
     private Model model;
+    Stack<Integer> pageStack;
 
+    public Controller(){
+        this.pageStack = new Stack<>();
+        this.pageStack.add(5);
+    }
+    
     public void setView(View view){
         this.view = view;
     }
