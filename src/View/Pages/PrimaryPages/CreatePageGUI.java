@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Controller.Controller;
@@ -30,7 +31,7 @@ public class CreatePageGUI extends JPanel{
     }
 
     public void start(){
-        this.setBackground(new Color(200,200,200));
+        this.setBackground(new Color(255,255,255));
         //GridLayout layout = new GridLayout(1, 2);
         BorderLayout layout = new BorderLayout();
         this.setLayout(layout);
@@ -38,7 +39,7 @@ public class CreatePageGUI extends JPanel{
         
         JPanel comboBoxPanel = new JPanel();
         comboBoxPanel.setBorder(BorderFactory.createEmptyBorder(200, 150, 20, 20));
-        comboBoxPanel.setBackground(new Color(150,150,150));
+        comboBoxPanel.setBackground(new Color(255,255,255));
         String[] creationOptions = {"Guest", "Stay", "Issue"};
         JComboBox creationList = new JComboBox(creationOptions);
         creationList.setFont(new Font("SansSerif", Font.PLAIN, 50));
@@ -62,6 +63,7 @@ public class CreatePageGUI extends JPanel{
         guestFirstNameLabel.setFont(new Font("SansSerif", Font.PLAIN, 30));
         JPanel guestFirstNameLabelPanel = new JPanel();
         guestFirstNameLabelPanel.add(guestFirstNameLabel);
+        guestFirstNameLabelPanel.setBackground(new Color(255,255,255));
         //guestFirstNameLabelPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         dataTitles.add(guestFirstNameLabelPanel);
 
@@ -69,6 +71,7 @@ public class CreatePageGUI extends JPanel{
         guestLastNameLabel.setFont(new Font("SansSerif", Font.PLAIN, 30));
         JPanel guestLastNameLabelPanel = new JPanel();
         guestLastNameLabelPanel.add(guestLastNameLabel);
+        guestLastNameLabelPanel.setBackground(new Color(255,255,255));
         //guestLastNameLabelPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         dataTitles.add(guestLastNameLabelPanel);
 
@@ -76,6 +79,7 @@ public class CreatePageGUI extends JPanel{
         guestPhoneNumberLabel.setFont(new Font("SansSerif", Font.PLAIN, 30));
         JPanel guestPhoneNumberLabelPanel = new JPanel();
         guestPhoneNumberLabelPanel.add(guestPhoneNumberLabel);
+        guestPhoneNumberLabelPanel.setBackground(new Color(255,255,255));
         //guestPhoneNumberLabelPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         dataTitles.add(guestPhoneNumberLabelPanel);
 
@@ -83,12 +87,38 @@ public class CreatePageGUI extends JPanel{
         guestEmailLabel.setFont(new Font("SansSerif", Font.PLAIN, 30));
         JPanel guestEmailLabelPanel = new JPanel();
         guestEmailLabelPanel.add(guestEmailLabel);
+        guestEmailLabelPanel.setBackground(new Color(255,255,255));
         //guestEmailLabelPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         dataTitles.add(guestEmailLabelPanel);
         dataTitles.add(Box.createRigidArea(new Dimension(0, (this.controller.getWindowHeight()/6)*2)));
 
         dataSide.add(dataTitles, BorderLayout.LINE_START);
-        dataTitles.setBackground(new Color(70,80,90));
+        dataTitles.setBackground(new Color(255,255,255));
+
+        JPanel dataEntries = new JPanel();
+        dataEntries.setBackground(new Color(255,255,255));
+        BoxLayout dataEntriesLayout = new BoxLayout(dataEntries, BoxLayout.PAGE_AXIS);
+        dataEntries.setLayout(dataEntriesLayout);
+        dataEntries.add(Box.createRigidArea(new Dimension(0, this.controller.getWindowHeight()/4)));        
+        JTextField firstNameEntry = new JTextField(20);
+        firstNameEntry.setFont(new Font("SansSerif", Font.PLAIN, 30));
+        firstNameEntry.setBackground(new Color(240,240,240));
+        dataEntries.add(firstNameEntry);
+        JTextField lastNameEntry = new JTextField(20);
+        lastNameEntry.setFont(new Font("SansSerif", Font.PLAIN, 30));
+        lastNameEntry.setBackground(new Color(240,240,240));
+        dataEntries.add(lastNameEntry);
+        JTextField phoneNumberEntry = new JTextField(20);
+        phoneNumberEntry.setFont(new Font("SansSerif", Font.PLAIN, 30));
+        phoneNumberEntry.setBackground(new Color(240,240,240));
+        dataEntries.add(phoneNumberEntry);
+        JTextField emailEntry = new JTextField(20);
+        emailEntry.setFont(new Font("SansSerif", Font.PLAIN, 30));
+        emailEntry.setBackground(new Color(240,240,240));
+        dataEntries.add(emailEntry);
+        dataEntries.add(Box.createRigidArea(new Dimension(0, (this.controller.getWindowHeight()/6)*2)));
+
+        dataSide.add(dataEntries, BorderLayout.CENTER);
 
         this.add(dataSide, BorderLayout.CENTER);
 
