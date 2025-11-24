@@ -81,8 +81,10 @@ public class Controller {
 
     public void start(){
         System.out.println(view.getLayout());
-        view.getContentPane().add(this.homePageGUI, BorderLayout.CENTER);
-        this.homePageGUI.start();
+        //view.getContentPane().add(this.homePageGUI, BorderLayout.CENTER);
+        //this.homePageGUI.start();
+        view.getContentPane().add(this.createPageGUI, BorderLayout.CENTER);
+        this.createPageGUI.start();
         view.revalidate();
         view.repaint();
     }

@@ -1,5 +1,8 @@
 package View;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import Controller.Controller;
 import View.Pages.Objects.GuestPageGUI;
@@ -41,8 +44,15 @@ public class View extends JFrame{
         this.setTitle("Lava Property Manager");
         this.setBounds(100, 100, 1500, 1000);
         this.setDefaultCloseOperation(1);
-
-
+        
+        JMenuBar menu = new JMenuBar();
+        JMenu options = new JMenu("Options");
+        JMenuItem saveButton = new JMenuItem("Save");
+        JMenuItem backButton = new JMenuItem("Back");
+        options.add(saveButton);
+        options.add(backButton);
+        menu.add(options);
+        this.setJMenuBar(menu);
 
         this.setVisible(true);
     }
