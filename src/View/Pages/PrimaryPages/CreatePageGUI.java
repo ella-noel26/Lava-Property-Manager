@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 
 import Controller.Controller;
 
@@ -88,6 +89,7 @@ public class CreatePageGUI extends JPanel{
         JPanel guestEmailLabelPanel = new JPanel();
         guestEmailLabelPanel.add(guestEmailLabel);
         guestEmailLabelPanel.setBackground(new Color(255,255,255));
+        guestEmailLabelPanel.setBorder(BorderFactory.createLineBorder(new Color(0,0,0), 1));
         //guestEmailLabelPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         dataTitles.add(guestEmailLabelPanel);
         dataTitles.add(Box.createRigidArea(new Dimension(0, (this.controller.getWindowHeight()/6)*2)));
