@@ -10,3 +10,4 @@ public class IssuePageGUI extends JPanel{
         this.controller = controller;
     }
 }
+

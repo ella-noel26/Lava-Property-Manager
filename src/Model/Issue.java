@@ -91,6 +91,9 @@ public class Issue implements Comparable<Issue>{
     }
 
     public int[] getResolvedDate(){
+        if (this.resolvedDate == null){
+            return new int[] {0,0,0};
+        }
         return this.resolvedDate;
     }
 
