@@ -1,7 +1,7 @@
 package Model;
 import java.util.ArrayList;
 
-public class Guest {
+public class Guest implements Comparable<Guest>{
     private String firstName;
     private String lastName;
     private long phoneNumber;
@@ -61,5 +61,42 @@ public class Guest {
 
     public void setEmail(String email){
         this.email = email;
+    }
+
+    @Override
+    public int compareTo(Guest other){
+        if (this.getLastName().compareTo(other.getLastName()) > 0){
+            return 1;
+        }
+        else if (this.getLastName().compareTo(other.getLastName()) < 0){
+            return -1;
+        }
+        else{
+            if (this.getFirstName().compareTo(other.getFirstName()) > 0){
+                return 1;
+            }
+            else if (this.getFirstName().compareTo(other.getFirstName()) < 0){
+                return -1;
+            }
+            else{
+                if (this.getPhoneNumber() > other.getPhoneNumber()){
+                    return 1;
+                }
+                else if (this.getPhoneNumber() < other.getPhoneNumber()){
+                    return -1;
+                }
+                else{
+                    if (this.getEmail().compareTo(other.getEmail()) > 0){
+                        return 1;
+                    }
+                    else if (this.getEmail().compareTo(other.getEmail()) > 0){
+                        return -1;
+                    }
+                    else{
+                        return 0;
+                    }
+                }
+            }
+        }
     }
 }

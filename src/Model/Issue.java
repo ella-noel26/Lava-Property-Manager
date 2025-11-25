@@ -1,7 +1,7 @@
 package Model;
 import java.util.ArrayList;
 
-public class Issue {
+public class Issue implements Comparable<Issue>{
     private int[] reportedDate;
     private int[] startedDate;
     private int[] resolvedDate;
@@ -95,5 +95,37 @@ public class Issue {
         for (Stay parent : parents){
             this.parentStays.add(parent);
         }
+    }
+
+    @Override
+    public int compareTo(Issue other){
+        if (this.getReportedDate()[2] != other.getReportedDate()[2]){
+            return this.getReportedDate()[2] - other.getReportedDate()[2];
+        }
+        else if (this.getReportedDate()[0] != other.getReportedDate()[0]){
+            return this.getReportedDate()[0] - other.getReportedDate()[0];
+        }
+        else if (this.getReportedDate()[1] != other.getReportedDate()[1]){
+            return this.getReportedDate()[1] - other.getReportedDate()[1];
+        }
+        else if (this.getStartedDate()[2] != other.getStartedDate()[2]){
+            return this.getStartedDate()[2] - other.getStartedDate()[2];
+        }
+        else if (this.getStartedDate()[0] != other.getStartedDate()[0]){
+            return this.getStartedDate()[0] - other.getStartedDate()[0];
+        }
+        else if (this.getStartedDate()[1] != other.getStartedDate()[1]){
+            return this.getStartedDate()[1] - other.getStartedDate()[1];
+        }
+        else if (this.getTitle().compareTo(other.getTitle()) != 0){
+            return this.getTitle().compareTo(other.getTitle());
+        }
+        else if (this.getDescription().compareTo(other.getDescription()) != 0){
+            return this.getDescription().compareTo(other.getDescription());
+        }
+        else{
+            return 0;
+        }
+
     }
 }

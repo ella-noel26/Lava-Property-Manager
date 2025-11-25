@@ -42,7 +42,7 @@ public class View extends JFrame{
         this.searchPageGUI = new SearchPageGUI(this.controller);
         
         this.setTitle("Lava Property Manager");
-        this.setBounds(100, 100, 1500, 1000);
+        this.setBounds(50, 50, 1200, 800);
         this.setDefaultCloseOperation(1);
         
         JMenuBar menu = new JMenuBar();

@@ -31,7 +31,6 @@ public class Controller {
 
     public Controller(){
         this.pageStack = new Stack<>();
-        this.pageStack.add(5);
     }
     
     public void setView(View view){
