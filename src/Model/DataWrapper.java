@@ -9,6 +9,15 @@ class DataWrapper {
     public int guestIdCounter;
     public int stayIdCounter;
     public int issueIdCounter;
+
+    public DataWrapper() {
+    this.guestMap = new HashMap<>();
+    this.stayMap = new HashMap<>();
+    this.issueMap = new HashMap<>();
+    this.guestIdCounter = 1;  // Start from 1 instead of 0
+    this.stayIdCounter = 1;
+    this.issueIdCounter = 1;
+    }
     
     public DataWrapper(HashMap<Integer, Guest> guestMap, HashMap<Integer, Stay> stayMap, 
                        HashMap<Integer, Issue> issueMap, int guestIdCounter, 

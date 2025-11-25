@@ -16,7 +16,7 @@ import View.Pages.PrimaryPages.HomePageGUI;
 import View.Pages.PrimaryPages.IssuesPageGUI;
 import View.Pages.PrimaryPages.RatingsPageGUI;
 import View.Pages.PrimaryPages.SearchPageGUI;
-import javafx.event.ActionEvent;
+//import javafx.event.ActionEvent;
 
 public class View extends JFrame implements ActionListener{
     private GuestPageGUI guestPageGui;
