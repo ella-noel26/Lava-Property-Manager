@@ -2,12 +2,13 @@ package Model;
 import java.util.ArrayList;
 
 public class Stay implements Comparable<Stay>{
+    private int id;
+    private int parentGuestId;
     private int[] startDate;
     private int[] endDate;
     private double price;
     private int location; //Lodge is 1, bunkhouse is 2
-    private ArrayList<Issue> childrenIssues;
-    private transient ArrayList<Guest> parentGuests;
+    private ArrayList<Integer> childIssueIds;
 
 
     public Stay(int[] arrivalDate, int[] leaveDate, double pricePaid, int place){
@@ -22,39 +23,38 @@ public class Stay implements Comparable<Stay>{
         }
 
         this.price = pricePaid;
-        
         this.location = place;
+        this.childIssueIds = new ArrayList<>();
 
-        this.childrenIssues = new ArrayList<>();
-
-        this.parentGuests = new ArrayList<>();
     }
 
-    public ArrayList<Issue> getChildrenIssues(){
-        return this.childrenIssues;
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public int getId() {
+        return this.id;
+    }
+    
+    public void setParentGuestId(int guestId) {
+        this.parentGuestId = guestId;
+    }
+    
+    public int getParentGuestId() {
+        return this.parentGuestId;
     }
 
-    public void addChildIssue(Issue issue){
-        this.childrenIssues.add(issue);
+    public ArrayList<Integer> getChildIssueIds(){
+        return this.childIssueIds;
     }
 
-    public void addChildrenIssues(ArrayList<Issue> issues){
-        for (Issue issue : issues){
-            this.childrenIssues.add(issue);
-        }
+    public void addChildIssueId(int issueId){
+        this.childIssueIds.add(issueId);
     }
 
-    public ArrayList<Guest> getParentGuests(){
-        return this.parentGuests;
-    }
-
-    public void addParentGuest (Guest guest){
-        this.parentGuests.add(guest);
-    }
-
-    public void addParentGuests(ArrayList<Guest> guests){
-        for (Guest guest : guests){
-            this.parentGuests.add(guest);
+    public void addChildIssueIds(ArrayList<Integer> issueIds){
+        for (int issueId : issueIds){
+            this.childIssueIds.add(issueId);
         }
     }
 

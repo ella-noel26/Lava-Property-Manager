@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 
@@ -13,32 +14,127 @@ import java.util.Scanner;
 public class Model {
     private Controller controller;
     private ArrayList<Guest> listOfGuests;
+    private HashMap<Integer, Guest> guestMap;
+    private HashMap<Integer, Stay> stayMap;
+    private HashMap<Integer, Issue> issueMap;
     private Gson gson;
+    private int guestIdCounter;
+    private int stayIdCounter;
+    private int issueIdCounter;
 
     public Model(Controller controller){
         this.controller = controller;
+        this.guestMap = new HashMap<>();
+        this.stayMap = new HashMap<>();
+        this.issueMap = new HashMap<>();
         gson = new Gson();
+        loadData();
+    }
+
+    private void loadData(){
         try (Scanner reader = new Scanner(new File("data.json"))){
-            while (reader.hasNextLine()){
+            if (reader.hasNextLine()){
                 String dataFromFile = reader.nextLine();
-                System.out.println(dataFromFile + "printing");
-                Guest[] fromJsonExample = gson.fromJson(dataFromFile, Guest[].class);
-                listOfGuests = new ArrayList<>(Arrays.asList(fromJsonExample));
+                DataWrapper wrapper = gson.fromJson(dataFromFile, DataWrapper.class);
+                this.guestMap = wrapper.guestMap;
+                this.stayMap = wrapper.stayMap;
+                this.issueMap = wrapper.issueMap;
+                this.guestIdCounter = wrapper.guestIdCounter;
+                this.stayIdCounter = wrapper.stayIdCounter;
+                this.issueIdCounter = wrapper.issueIdCounter;
+            } else {
+                this.guestIdCounter = 1;
+                this.stayIdCounter = 1;
+                this.issueIdCounter = 1;
             }
         }
         catch (IOException error){
-
+            this.guestIdCounter = 1;
+            this.stayIdCounter = 1;
+            this.issueIdCounter = 1;
         }
     }
 
     public void saveData(){
         try (FileWriter writer = new FileWriter("data.json")){
-            writer.write(gson.toJson(listOfGuests));
+            DataWrapper wrapper = new DataWrapper(guestMap, stayMap, issueMap, guestIdCounter, stayIdCounter, issueIdCounter);
+            writer.write(gson.toJson(wrapper));
             writer.close();
         }
         catch(IOException error){
             System.out.println(error);
         }
+    }
+    
+    public void addGuest(Guest guest) {
+        guest.setId(guestIdCounter);
+        guestMap.put(guestIdCounter, guest);
+        guestIdCounter++;
+    }
+    
+    public void addStay(Stay stay, int guestId) {
+        stay.setId(stayIdCounter);
+        stay.setParentGuestId(guestId);
+        stayMap.put(stayIdCounter, stay);
+        stayIdCounter++;
+    }
+    
+    public void addIssue(Issue issue, int stayId) {
+        issue.setId(issueIdCounter);
+        issue.setParentStayId(stayId);
+        issueMap.put(issueIdCounter, issue);
+        issueIdCounter++;
+    }
+    public Guest getGuestById(int id) {
+        return guestMap.get(id);
+    }
+    
+    public Stay getStayById(int id) {
+        return stayMap.get(id);
+    }
+    
+    public Issue getIssueById(int id) {
+        return issueMap.get(id);
+    }
+    
+    public ArrayList<Stay> getStaysForGuest(int guestId) {
+        ArrayList<Stay> guestStays = new ArrayList<>();
+        for (Stay stay : stayMap.values()) {
+            if (stay.getParentGuestId() == guestId) {
+                guestStays.add(stay);
+            }
+        }
+        return guestStays;
+    }
+    
+    public ArrayList<Issue> getIssuesForStay(int stayId) {
+        ArrayList<Issue> stayIssues = new ArrayList<>();
+        for (Issue issue : issueMap.values()) {
+            if (issue.getParentStayId() == stayId) {
+                stayIssues.add(issue);
+            }
+        }
+        return stayIssues;
+    }
+
+    public ArrayList<Guest> searchGuestsByName(String firstName, String lastName) {
+        ArrayList<Guest> results = new ArrayList<>();
+        for (Guest guest : guestMap.values()) {
+            if (guest.getFirstName().equalsIgnoreCase(firstName) && 
+                guest.getLastName().equalsIgnoreCase(lastName)) {
+                results.add(guest);
+            }
+        }
+        return results;
+    }
+    
+    public Guest searchGuestByPhone(long phoneNumber) {
+        for (Guest guest : guestMap.values()) {
+            if (guest.getPhoneNumber() == phoneNumber) {
+                return guest;
+            }
+        }
+        return null;
     }
 }
         /*Guest guest = new Guest("Ella", "Frandsen", 3852991133l, "ella.n.frandsen@gmail.com");

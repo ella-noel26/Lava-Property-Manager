@@ -2,11 +2,12 @@ package Model;
 import java.util.ArrayList;
 
 public class Guest implements Comparable<Guest>{
+    private int id;
     private String firstName;
     private String lastName;
     private long phoneNumber;
     private String email;
-    private ArrayList<Stay> childStays;
+    private ArrayList<Integer> childStayIds;
 
 
     public Guest (String firstName, String lastName, long phoneNumber, String email){
@@ -14,20 +15,28 @@ public class Guest implements Comparable<Guest>{
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.childStays = new ArrayList<>();
+        this.childStayIds = new ArrayList<>();
     }
 
-    public ArrayList<Stay> getChildStays(){
-        return this.childStays;
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public int getId() {
+        return this.id;
     }
 
-    public void addChildStay(Stay stay){
-        this.childStays.add(stay);
+    public ArrayList<Integer> getChildStays(){
+        return this.childStayIds;
     }
 
-    public void addChildStays(ArrayList<Stay> stays){
-        for (Stay stay : stays){
-            this.childStays.add(stay);
+    public void addChildStayId(int stayId){
+        this.childStayIds.add(stayId);
+    }
+
+    public void addChildStays(ArrayList<Integer> stayIds){
+        for (int stayId : stayIds){
+            this.childStayIds.add(stayId);
         }
     }
     

@@ -1,4 +1,6 @@
 package View;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -14,8 +16,9 @@ import View.Pages.PrimaryPages.HomePageGUI;
 import View.Pages.PrimaryPages.IssuesPageGUI;
 import View.Pages.PrimaryPages.RatingsPageGUI;
 import View.Pages.PrimaryPages.SearchPageGUI;
+import javafx.event.ActionEvent;
 
-public class View extends JFrame{
+public class View extends JFrame implements ActionListener{
     private GuestPageGUI guestPageGui;
     private IssuePageGUI issuePageGUI;
     private StayPageGUI stayPageGUI;
@@ -26,6 +29,11 @@ public class View extends JFrame{
     private RatingsPageGUI ratingsPageGUI;
     private SearchPageGUI searchPageGUI;
     private Controller controller;
+
+    private JMenuBar menu;
+    private JMenu options;
+    private JMenuItem saveButton;
+    private JMenuItem backButton;
     
     
     public View(Controller controller){
@@ -45,16 +53,29 @@ public class View extends JFrame{
         this.setBounds(50, 50, 1200, 800);
         this.setDefaultCloseOperation(1);
         
-        JMenuBar menu = new JMenuBar();
-        JMenu options = new JMenu("Options");
-        JMenuItem saveButton = new JMenuItem("Save");
-        JMenuItem backButton = new JMenuItem("Back");
+        menu = new JMenuBar();
+        options = new JMenu("Options");
+        saveButton = new JMenuItem("Save");
+        backButton = new JMenuItem("Back");
+        saveButton.addActionListener(this);
+        backButton.addActionListener(this);
         options.add(saveButton);
         options.add(backButton);
         menu.add(options);
         this.setJMenuBar(menu);
 
         this.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(java.awt.event.ActionEvent e) {
+        Object source = e.getSource();
+        if (source == this.saveButton){
+            this.controller.save();
+        }
+        if (source == this.backButton){
+            
+        }
     }
 
     public GuestPageGUI getGuestPageGUI(){
@@ -84,6 +105,8 @@ public class View extends JFrame{
     public SearchPageGUI getSearchPageGUI(){
         return this.searchPageGUI;
     }
+
+
 
 
 }

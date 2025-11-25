@@ -17,7 +17,7 @@ import View.Pages.PrimaryPages.SearchPageGUI;
 
 public class Controller {
     private View view;
-    private GuestPageGUI guestPageGui;
+    private GuestPageGUI guestPageGUI;
     private IssuePageGUI issuePageGUI;
     private StayPageGUI stayPageGUI;
     private CalendarPageGUI calendarPageGUI;
@@ -31,14 +31,87 @@ public class Controller {
 
     public Controller(){
         this.pageStack = new Stack<>();
+        this.pageStack.push(6);
     }
     
+    public void save(){
+        this.model.saveData();
+    }
+
+    public void back(){
+        if (!pageStack.isEmpty()){
+            int pageID = pageStack.pop();
+            view.getContentPane().removeAll();
+            switch (pageID){
+                case 1:
+                    view.getContentPane().add(this.guestPageGUI, BorderLayout.CENTER);
+                    this.guestPageGUI.start();
+                    view.revalidate();
+                    view.repaint();
+                    break;
+                case 2:
+                    view.getContentPane().add(this.issuePageGUI, BorderLayout.CENTER);
+                    this.issuePageGUI.start();
+                    view.revalidate();
+                    view.repaint();
+                    break;
+                case 3:
+                    view.getContentPane().add(this.stayPageGUI, BorderLayout.CENTER);
+                    this.stayPageGUI.start();
+                    view.revalidate();
+                    view.repaint();
+                    break;
+                case 4:
+                    view.getContentPane().add(this.calendarPageGUI, BorderLayout.CENTER);
+                    this.calendarPageGUI.start();
+                    view.revalidate();
+                    view.repaint();
+                    break;
+
+                case 5:
+                    view.getContentPane().add(this.createPageGUI, BorderLayout.CENTER);
+                    this.createPageGUI.start();
+                    view.revalidate();
+                    view.repaint();
+                    break;
+                case 6:
+                    view.getContentPane().add(this.homePageGUI, BorderLayout.CENTER);
+                    this.homePageGUI.start();
+                    view.revalidate();
+                    view.repaint();
+                    break;
+
+
+                case 7:
+                    view.getContentPane().add(this.issuesPageGUI, BorderLayout.CENTER);
+                    this.issuesPageGUI.start();
+                    view.revalidate();
+                    view.repaint();
+                    break;
+                case 8:
+                    view.getContentPane().add(this.ratingsPageGUI, BorderLayout.CENTER);
+                    this.ratingsPageGUI.start();
+                    view.revalidate();
+                    view.repaint();
+                    break;
+                case 9:
+                    view.getContentPane().add(this.searchPageGUI, BorderLayout.CENTER);
+                    this.searchPageGUI.start();
+                    view.revalidate();
+                    view.repaint();
+                    break;
+
+                //add more cases as needed
+            }
+        }
+    }
+
     public void setView(View view){
         this.view = view;
     }
 
     public void setGuestPageGui(GuestPageGUI guestPageGUI){
-        this.guestPageGui = guestPageGUI;
+        this.guestPageGUI = guestPageGUI;
     }
 
     public void setIssuePageGUI(IssuePageGUI issuePageGUI){

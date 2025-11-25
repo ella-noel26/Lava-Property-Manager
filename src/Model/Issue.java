@@ -2,12 +2,13 @@ package Model;
 import java.util.ArrayList;
 
 public class Issue implements Comparable<Issue>{
+    private int id;
+    private int parentStayId;
     private int[] reportedDate;
     private int[] startedDate;
     private int[] resolvedDate;
     private String description;
     private String title;
-    private transient ArrayList<Stay> parentStays;
 
     public Issue(String name, int[] reportDate, int[] startDate, String desc){
         this.title = name;
@@ -24,7 +25,7 @@ public class Issue implements Comparable<Issue>{
 
         this.description = desc;
 
-        parentStays = new ArrayList<>();
+        this.resolvedDate = null;
     }
     
     public Issue(String name, int[] reportDate, int[] startDate, int[] resolveDate, String desc){
@@ -35,6 +36,22 @@ public class Issue implements Comparable<Issue>{
             this.resolvedDate[index] = resolveDate[index];
         }
 
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public int getId() {
+        return this.id;
+    }
+    
+    public void setParentStayId(int stayId) {
+        this.parentStayId = stayId;
+    }
+    
+    public int getParentStayId() {
+        return this.parentStayId;
     }
 
     public String getTitle(){
@@ -83,19 +100,6 @@ public class Issue implements Comparable<Issue>{
         }
     }
 
-    public ArrayList<Stay> getParentStays(){
-        return this.parentStays;
-    }
-
-    public void addParentStay(Stay stay){
-        this.parentStays.add(stay);
-    }
-
-    public void addParentStays(ArrayList<Stay> parents){
-        for (Stay parent : parents){
-            this.parentStays.add(parent);
-        }
-    }
 
     @Override
     public int compareTo(Issue other){
