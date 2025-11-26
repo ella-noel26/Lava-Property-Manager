@@ -148,6 +148,48 @@ public class Model {
         return stayIssues;
     }
 
+    public ArrayList<Guest> getTopRatedGuests(int limit) {
+        ArrayList<Guest> guests = new ArrayList<>(guestMap.values());
+        
+        // Filter guests with ratings and sort by average rating descending
+        ArrayList<Guest> ratedGuests = new ArrayList<>();
+        for (Guest g : guests) {
+            Double avg = g.getAverageRating(this);
+            if (avg != null) {
+                ratedGuests.add(g);
+            }
+        }
+        
+        ratedGuests.sort((g1, g2) -> {
+            Double avg1 = g1.getAverageRating(this);
+            Double avg2 = g2.getAverageRating(this);
+            return avg2.compareTo(avg1); // descending
+        });
+        
+        return new ArrayList<>(ratedGuests.subList(0, Math.min(limit, ratedGuests.size())));
+    }
+
+    public ArrayList<Guest> getLowestRatedGuests(int limit) {
+        ArrayList<Guest> guests = new ArrayList<>(guestMap.values());
+        
+        // Filter guests with ratings and sort by average rating ascending
+        ArrayList<Guest> ratedGuests = new ArrayList<>();
+        for (Guest g : guests) {
+            Double avg = g.getAverageRating(this);
+            if (avg != null) {
+                ratedGuests.add(g);
+            }
+        }
+        
+        ratedGuests.sort((g1, g2) -> {
+            Double avg1 = g1.getAverageRating(this);
+            Double avg2 = g2.getAverageRating(this);
+            return avg1.compareTo(avg2); // ascending
+        });
+        
+        return new ArrayList<>(ratedGuests.subList(0, Math.min(limit, ratedGuests.size())));
+    }
+
 
     public ArrayList<Guest> searchGuests(ArrayList<String> searchTerms){
         ArrayList<Guest> results = new ArrayList<>();
@@ -280,6 +322,24 @@ public class Model {
         // Persist
         saveData();
     }   
+
+    public void updateGuest(Guest g) {
+        if (g == null) return;
+        if (g.getId() <= 0) return;
+        guestMap.put(g.getId(), g);
+    }
+
+    public void updateStay(Stay s) {
+        if (s == null) return;
+        if (s.getId() <= 0) return;
+        stayMap.put(s.getId(), s);
+    }
+
+    public void updateIssue(Issue i) {
+        if (i == null) return;
+        if (i.getId() <= 0) return;
+        issueMap.put(i.getId(), i);
+    }
 }
 /*package Model;
 import com.google.gson.Gson;

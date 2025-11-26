@@ -35,7 +35,7 @@ public class Controller {
 
     public Controller(){
         this.pageStack = new Stack<>();
-        this.pageStack.push(7);
+        this.pageStack.push(6);
     }
     
     public void save(){
@@ -43,34 +43,77 @@ public class Controller {
     }
 
     public void back(){
+        System.out.println("in back method" +  pageStack.peek());
         if (!pageStack.isEmpty()){
-            int pageID = pageStack.pop();
-            this.displayPage(pageID);
+            pageStack.pop();
+            this.displayPage(pageStack.peek());
+        }
+        else{
+            this.displayPage(6);
         }
     }
     
     public void displayPage(int pageID){
         view.getContentPane().removeAll();
         switch (pageID){
+            case 1:
+                pageStack.add(1);    
+                view.getContentPane().add(this.guestPageGUI, BorderLayout.CENTER);
+                this.guestPageGUI.start();
+                view.revalidate();
+                view.repaint();
+                break;
+            case 2:
+                pageStack.add(2);
+                view.getContentPane().add(this.issuePageGUI, BorderLayout.CENTER);
+                this.issuePageGUI.start();
+                view.revalidate();
+                view.repaint();
+                break;
+            case 3:
+                pageStack.add(3);
+                view.getContentPane().add(this.stayPageGUI, BorderLayout.CENTER);
+                this.stayPageGUI.start();
+                view.revalidate();
+                view.repaint();
+                break;
+            case 4:
+                pageStack.add(4);
+                view.getContentPane().add(this.calendarPageGUI, BorderLayout.CENTER);
+                this.calendarPageGUI.start();
+                view.revalidate();
+                view.repaint();
+                break;
             case 5:
+                pageStack.add(5);
                 view.getContentPane().add(this.createPageGUI, BorderLayout.CENTER);
                 this.createPageGUI.start();
                 view.revalidate();
                 view.repaint();
                 break;
             case 6:
+                pageStack.add(6);
                 view.getContentPane().add(this.homePageGUI, BorderLayout.CENTER);
                 this.homePageGUI.start();
                 view.revalidate();
                 view.repaint();
                 break;
             case 7:
+                pageStack.add(7);
                 view.getContentPane().add(this.issuesPageGUI, BorderLayout.CENTER);
                 this.issuesPageGUI.start();
                 view.revalidate();
                 view.repaint();
                 break;
+            case 8:
+                pageStack.add(8);
+                view.getContentPane().add(this.ratingsPageGUI, BorderLayout.CENTER);
+                this.ratingsPageGUI.start();
+                view.revalidate();
+                view.repaint();
+                break;
             case 9:
+                pageStack.add(9);
                 view.getContentPane().add(this.searchPageGUI, BorderLayout.CENTER);
                 this.searchPageGUI.start();
                 view.revalidate();
@@ -79,15 +122,61 @@ public class Controller {
         }
     }
 
+    public Model getModel(){
+        return this.model;
+    }
+
     public ArrayList<Stay> getStaysOnDate(LocalDate date){
         return model.getStaysOnDate(date);
     }
 
-    /**
-     * Open the stay page for a specific stay id.
-     * If StayPageGUI provides a specific 'showStay(Stay)' method it will be invoked.
-     * This prepares the app for clicking a date in the calendar and navigating to the stay.
-     */
+    public ArrayList<Guest> getTopRatedGuests(int limit){
+        return model.getTopRatedGuests(limit);
+    }
+
+    public ArrayList<Guest> getLowestRatedGuests(int limit){
+        return model.getLowestRatedGuests(limit);
+    }
+
+        public void updateGuest(Guest g){
+        model.updateGuest(g);
+    }
+
+    public void updateStay(Stay s){
+        model.updateStay(s);
+    }
+
+    public void updateIssue(Issue i){
+        model.updateIssue(i);
+    }
+
+    public void openGuestPage(int guestId){
+        Guest g = model.getGuestById(guestId);
+        if (g == null) return;
+        view.getContentPane().removeAll();
+        if (this.guestPageGUI != null) {
+            view.getContentPane().add(this.guestPageGUI, BorderLayout.CENTER);
+            this.guestPageGUI.start();
+            try { this.guestPageGUI.getClass().getMethod("showGuest", Guest.class).invoke(this.guestPageGUI, g); } catch (Exception ignored) {}
+        }
+        view.revalidate();
+        view.repaint();
+    }
+
+    public void openIssuePage(int issueId){
+        Issue i = model.getIssueById(issueId);
+        if (i == null) return;
+        view.getContentPane().removeAll();
+        if (this.issuePageGUI != null) {
+            view.getContentPane().add(this.issuePageGUI, BorderLayout.CENTER);
+            this.issuePageGUI.start();
+            try { this.issuePageGUI.getClass().getMethod("showIssue", Issue.class).invoke(this.issuePageGUI, i); } catch (Exception ignored) {}
+        }
+        view.revalidate();
+        view.repaint();
+    }
+
+
     public void openStayPage(int stayId){
         Stay stay = model.getStayById(stayId);
         if (stay == null) return;
@@ -176,11 +265,7 @@ public class Controller {
     }
 
     public void start(){
-<<<<<<< HEAD
-        this.displayPage(4);
-=======
-        this.displayPage(9);
->>>>>>> 7463ec444d1ecf0cf0ae3c489f082941872901db
+        this.displayPage(6);
     }
 
     public void pack(){

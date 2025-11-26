@@ -1,18 +1,9 @@
-/*package View.Pages.PrimaryPages;
-import javax.swing.JPanel;
-
-import Controller.Controller;
-
-public class SearchPageGUI extends JPanel{
-    private Controller controller;
-    public SearchPageGUI (Controller controller){
-        this.controller = controller;
-    }
-}*/
 package View.Pages.PrimaryPages;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import Controller.Controller;
 import Model.Guest;
@@ -26,13 +17,21 @@ public class SearchPageGUI extends JPanel{
     private JTable resultsTable;
     private DefaultTableModel tableModel;
     private ArrayList<JTextField> searchFields;
+    private ArrayList<Guest> currentGuestResults;
+    private ArrayList<Stay> currentStayResults;
+    private ArrayList<Issue> currentIssueResults;
+    private String currentSearchType = "Guest";
 
     public SearchPageGUI(Controller controller){
         this.controller = controller;
         this.searchFields = new ArrayList<>();
+        this.currentGuestResults = new ArrayList<>();
+        this.currentStayResults = new ArrayList<>();
+        this.currentIssueResults = new ArrayList<>();
     }
 
     public void start(){
+        this.removeAll();
         this.setBackground(new Color(255, 255, 255));
         this.setLayout(new BorderLayout());
 
@@ -82,6 +81,15 @@ public class SearchPageGUI extends JPanel{
         tableModel = new DefaultTableModel();
         resultsTable = new JTable(tableModel);
         resultsTable.setFillsViewportHeight(true);
+        resultsTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = resultsTable.rowAtPoint(e.getPoint());
+                if (row >= 0) {
+                    onResultClicked(row);
+                }
+            }
+        });
         
         JScrollPane resultsScrollPane = new JScrollPane(resultsTable);
         resultsScrollPane.setPreferredSize(new Dimension(400, 300));
@@ -92,41 +100,76 @@ public class SearchPageGUI extends JPanel{
         
         this.add(resultPanel, BorderLayout.EAST);
 
-        // Initialize with Guest search criteria
+        // Reset results every time this page is opened
+        resetResultsState();
         updateSearchCriteria();
+
+        revalidate();
+        repaint();
+    }
+
+    private void resetResultsState(){
+        currentGuestResults.clear();
+        currentStayResults.clear();
+        currentIssueResults.clear();
+        clearResultsTableColumns();
+    }
+
+    private void clearResultsTableColumns(){
+        tableModel.setRowCount(0);
+        tableModel.setColumnCount(0);
+        // Optional: show empty headers for the selected type
+        if ("Guest".equals(currentSearchType)) {
+            tableModel.addColumn("First Name");
+            tableModel.addColumn("Last Name");
+            tableModel.addColumn("Phone");
+            tableModel.addColumn("Email");
+        } else if ("Stay".equals(currentSearchType)) {
+            tableModel.addColumn("Check-in");
+            tableModel.addColumn("Check-out");
+            tableModel.addColumn("Price");
+            tableModel.addColumn("Location");
+        } else if ("Issue".equals(currentSearchType)) {
+            tableModel.addColumn("Title");
+            tableModel.addColumn("Description");
+            tableModel.addColumn("Reported Date");
+            tableModel.addColumn("Started Date");
+            tableModel.addColumn("Resolved Date");
+        }
     }
 
     private void updateSearchCriteria(){
         searchCriteriaPanel.removeAll();
         searchFields.clear();
         
-        String searchType = (String) searchTypeCombo.getSelectedItem();
+        currentSearchType = (String) searchTypeCombo.getSelectedItem();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        if ("Guest".equals(searchType)) {
+        if ("Guest".equals(currentSearchType)) {
             addSearchField("First Name:", gbc, 0);
             addSearchField("Last Name:", gbc, 1);
-            addSearchField("Phone Number:", gbc, 2);
+            addSearchField("Phone:", gbc, 2);
             addSearchField("Email:", gbc, 3);
-        } else if ("Stay".equals(searchType)) {
+        } else if ("Stay".equals(currentSearchType)) {
             addSearchField("Guest ID:", gbc, 0);
             addSearchField("Check-in Date (M/D/YYYY):", gbc, 1);
             addSearchField("Check-out Date (M/D/YYYY):", gbc, 2);
             addSearchField("Price:", gbc, 3);
-            addSearchField("Location: (1 Lodge, 2 Bunkhouse)", gbc, 4);
-
-        } else if ("Issue".equals(searchType)) {
+            addSearchField("Location (1 Lodge, 2 Bunkhouse):", gbc, 4);
+        } else if ("Issue".equals(currentSearchType)) {
             addSearchField("Title:", gbc, 0);
             addSearchField("Stay ID:", gbc, 1);
             addSearchField("Description:", gbc, 2);
             addSearchField("Reported Date (M/D/YYYY):", gbc, 3);
             addSearchField("Started Date (M/D/YYYY):", gbc, 4);
             addSearchField("Resolved Date (M/D/YYYY):", gbc, 5);
-
         }
+
+        // Clear previous results when switching types
+        resetResultsState();
 
         searchCriteriaPanel.revalidate();
         searchCriteriaPanel.repaint();
@@ -149,12 +192,10 @@ public class SearchPageGUI extends JPanel{
     private void performSearch(){
         String searchType = (String) searchTypeCombo.getSelectedItem();
         ArrayList<String> searchTerms = new ArrayList<>();
-        
         for (JTextField field : searchFields) {
             searchTerms.add(field.getText());
         }
 
-        // Call controller to search
         if ("Guest".equals(searchType)) {
             controller.searchGuests(searchTerms);
         } else if ("Stay".equals(searchType)) {
@@ -164,58 +205,76 @@ public class SearchPageGUI extends JPanel{
         }
     }
 
+    private void onResultClicked(int row) {
+        if ("Guest".equals(currentSearchType) && row < currentGuestResults.size()) {
+            controller.openGuestPage(currentGuestResults.get(row).getId());
+        } else if ("Stay".equals(currentSearchType) && row < currentStayResults.size()) {
+            controller.openStayPage(currentStayResults.get(row).getId());
+        } else if ("Issue".equals(currentSearchType) && row < currentIssueResults.size()) {
+            controller.openIssuePage(currentIssueResults.get(row).getId());
+        }
+    }
+
+    // Called by controller after a search completes
     public void displayGuestResults(ArrayList<Guest> guests){
+        currentGuestResults = guests;
         tableModel.setRowCount(0);
         tableModel.setColumnCount(0);
-        //tableModel.addColumn("ID");
         tableModel.addColumn("First Name");
         tableModel.addColumn("Last Name");
         tableModel.addColumn("Phone");
         tableModel.addColumn("Email");
 
         for (Guest guest : guests) {
-            Object[] row = {/*guest.getId(), */guest.getFirstName(), guest.getLastName(), guest.getPhoneNumber(), guest.getEmail()};
+            Object[] row = {guest.getFirstName(), guest.getLastName(), guest.getPhoneNumber(), guest.getEmail()};
             tableModel.addRow(row);
         }
     }
 
     public void displayStayResults(ArrayList<Stay> stays){
+        currentStayResults = stays;
         tableModel.setRowCount(0);
         tableModel.setColumnCount(0);
-        //tableModel.addColumn("ID");
-        //tableModel.addColumn("Guest ID");
         tableModel.addColumn("Check-in");
         tableModel.addColumn("Check-out");
         tableModel.addColumn("Price");
         tableModel.addColumn("Location");
 
         for (Stay stay : stays) {
-            Object[] row = {/*stay.getId(), stay.getParentGuestId(),*/ 
-                           arrayToString(stay.getStartDate()), arrayToString(stay.getEndDate()), stay.getPrice(), stay.getLocation()};
+            Object[] row = {
+                arrayToString(stay.getStartDate()),
+                arrayToString(stay.getEndDate()),
+                stay.getPrice(),
+                stay.getLocation()
+            };
             tableModel.addRow(row);
         }
     }
 
-    //fix   
     public void displayIssueResults(ArrayList<Issue> issues){
+        currentIssueResults = issues;
         tableModel.setRowCount(0);
         tableModel.setColumnCount(0);
-        //tableModel.addColumn("ID");
         tableModel.addColumn("Title");
         tableModel.addColumn("Description");
         tableModel.addColumn("Reported Date");
         tableModel.addColumn("Started Date");
         tableModel.addColumn("Resolved Date");
-        //tableModel.addColumn("Stay ID");
 
         for (Issue issue : issues) {
-            Object[] row = {/*issue.getId(),*/ issue.getTitle(), issue.getDescription(), arrayToString(issue.getReportedDate()), arrayToString(issue.getStartedDate()), 
-                arrayToString(issue.getResolvedDate()), /*issue.getParentStayId()*/};
+            Object[] row = {
+                issue.getTitle(),
+                issue.getDescription(),
+                arrayToString(issue.getReportedDate()),
+                arrayToString(issue.getStartedDate()),
+                arrayToString(issue.getResolvedDate())
+            };
             tableModel.addRow(row);
         }
     }
 
     private String arrayToString(int[] date){
+        if (date == null || date.length < 3) return "";
         return date[0] + "/" + date[1] + "/" + date[2];
     }
 }

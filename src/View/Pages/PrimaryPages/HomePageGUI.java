@@ -91,7 +91,7 @@ public class HomePageGUI extends JPanel{
         issues.setPreferredSize(new Dimension(this.controller.getWindowWidth()/3,100));
         issues.setMaximumSize(new Dimension(this.controller.getWindowWidth()/3,100));
         issues.setBorder(BorderFactory.createLineBorder(new Color(255,255,255)));
-        JLabel issuesText = new JLabel("issues");
+        JLabel issuesText = new JLabel("Issues");
         issuesText.setForeground(new Color(255,255,255));
         issuesText.setFont(new Font("SansSerif", Font.PLAIN, 30));
         JPanel issuesTextPanel = new JPanel();
@@ -134,6 +134,11 @@ public class HomePageGUI extends JPanel{
         buttons.add(ratings);
         buttons.add(Box.createRigidArea(new Dimension(0, this.controller.getWindowHeight()/6)));
 
+        objectCreator.addActionListener(ev -> controller.displayPage(5));
+        search.addActionListener(ev -> controller.displayPage(9));
+        calendar.addActionListener(ev -> controller.displayPage(4));
+        issues.addActionListener(ev -> controller.displayPage(7));
+        ratings.addActionListener(ev -> controller.displayPage(8));
         
         
         

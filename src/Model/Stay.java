@@ -10,6 +10,7 @@ public class Stay implements Comparable<Stay>{
     private double price;
     private int location; //Lodge is 1, bunkhouse is 2
     private ArrayList<Integer> childIssueIds;
+    private Integer rating;
 
 
     public Stay(int[] arrivalDate, int[] leaveDate, double pricePaid, int place){
@@ -26,7 +27,18 @@ public class Stay implements Comparable<Stay>{
         this.price = pricePaid;
         this.location = place;
         this.childIssueIds = new ArrayList<>();
+        this.rating = null;
+    }
 
+    public Integer getRating(){
+        return this.rating;
+    }
+
+    public void setRating(Integer rating){
+        if (rating != null && (rating < 1 || rating > 5)) {
+            throw new IllegalArgumentException("Rating must be between 1 and 5");
+        }
+        this.rating = rating;
     }
 
     public LocalDate getStartLocalDate() {

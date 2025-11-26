@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,10 +18,10 @@ import java.util.Comparator;
 import Controller.Controller;
 import Model.Issue;
 
-//fix what the tables display, add titles
-
 public class IssuesPageGUI extends JPanel {
     private Controller controller;
+    private ArrayList<Issue> openIssues;
+    private ArrayList<Issue> resolvedIssues;
 
     private JTable openTable;
     private DefaultTableModel openTableModel;
@@ -29,6 +31,8 @@ public class IssuesPageGUI extends JPanel {
 
     public IssuesPageGUI(Controller controller) {
         this.controller = controller;
+        this.openIssues = new ArrayList<>();
+        this.resolvedIssues = new ArrayList<>();
         initLayout();
     }
 
@@ -52,6 +56,16 @@ public class IssuesPageGUI extends JPanel {
         };
         openTable = new JTable(openTableModel);
         openTable.setFillsViewportHeight(true);
+        openTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = openTable.rowAtPoint(e.getPoint());
+                if (row >= 0 && row < openIssues.size()) {
+                    Issue issue = openIssues.get(row);
+                    controller.openIssuePage(issue.getId());
+                }
+            }
+        });
         JScrollPane openScroll = new JScrollPane(openTable);
         left.add(openScroll, BorderLayout.CENTER);
 
@@ -64,6 +78,16 @@ public class IssuesPageGUI extends JPanel {
         };
         resolvedTable = new JTable(resolvedTableModel);
         resolvedTable.setFillsViewportHeight(true);
+        resolvedTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = resolvedTable.rowAtPoint(e.getPoint());
+                if (row >= 0 && row < resolvedIssues.size()) {
+                    Issue issue = resolvedIssues.get(row);
+                    controller.openIssuePage(issue.getId());
+                }
+            }
+        });
         JScrollPane resolvedScroll = new JScrollPane(resolvedTable);
         right.add(resolvedScroll, BorderLayout.CENTER);
 
@@ -79,33 +103,33 @@ public class IssuesPageGUI extends JPanel {
 
     // Call to (re)load data from model via controller
     public void refresh() {
-        // clear models
+        // clear models and lists
         openTableModel.setRowCount(0);
         resolvedTableModel.setRowCount(0);
+        openIssues.clear();
+        resolvedIssues.clear();
 
         // Get all issues from controller
         ArrayList<Issue> allIssues = controller.getAllIssues();
         if (allIssues == null) return;
 
         // Partition into open vs resolved
-        ArrayList<Issue> open = new ArrayList<>();
-        ArrayList<Issue> resolved = new ArrayList<>();
         for (Issue iss : allIssues) {
             int[] resolvedDate = iss.getResolvedDate();
             boolean isResolved = !(resolvedDate.length == 3 && resolvedDate[0] == 0 && resolvedDate[1] == 0 && resolvedDate[2] == 0);
-            if (isResolved) resolved.add(iss);
-            else open.add(iss);
+            if (isResolved) resolvedIssues.add(iss);
+            else openIssues.add(iss);
         }
 
         // Sort newest reported first (Issue implements Comparable ascending by reported date)
         Comparator<Issue> reportedAsc = Comparator.naturalOrder();
-        Collections.sort(open, reportedAsc);
-        Collections.sort(resolved, reportedAsc);
-        Collections.reverse(open);
-        Collections.reverse(resolved);
+        Collections.sort(openIssues, reportedAsc);
+        Collections.sort(resolvedIssues, reportedAsc);
+        Collections.reverse(openIssues);
+        Collections.reverse(resolvedIssues);
 
         // Populate open table: Reported, Started, Description
-        for (Issue iss : open) {
+        for (Issue iss : openIssues) {
             String reported = formatDate(iss.getReportedDate());
             String started = formatDate(iss.getStartedDate());
             String desc = safeString(iss.getDescription());
@@ -113,7 +137,7 @@ public class IssuesPageGUI extends JPanel {
         }
 
         // Populate resolved table: Reported, Description
-        for (Issue iss : resolved) {
+        for (Issue iss : resolvedIssues) {
             String reported = formatDate(iss.getReportedDate());
             String desc = safeString(iss.getDescription());
             resolvedTableModel.addRow(new Object[] { reported, desc });

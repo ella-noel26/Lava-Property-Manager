@@ -8,6 +8,8 @@ public class Guest implements Comparable<Guest>{
     private long phoneNumber;
     private String email;
     private ArrayList<Integer> childStayIds;
+    private String description;
+    private double discountModifier;
 
 
     public Guest (String firstName, String lastName, long phoneNumber, String email){
@@ -16,6 +18,8 @@ public class Guest implements Comparable<Guest>{
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.childStayIds = new ArrayList<>();
+        this.description = "";
+        this.discountModifier = 1.0;
     }
 
     public void setId(int id) {
@@ -70,6 +74,46 @@ public class Guest implements Comparable<Guest>{
 
     public void setEmail(String email){
         this.email = email;
+    }
+
+    public Double getAverageRating(Model model) {
+        if (model == null || this.childStayIds.isEmpty()) {
+            return null;
+        }
+        
+        int ratedCount = 0;
+        double totalRating = 0;
+        
+        for (Integer stayId : this.childStayIds) {
+            Stay stay = model.getStayById(stayId);
+            if (stay != null && stay.getRating() != null) {
+                totalRating += stay.getRating();
+                ratedCount++;
+            }
+        }
+        
+        if (ratedCount == 0) {
+            return null;
+        }
+        
+        return totalRating / ratedCount;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String desc) {
+        this.description = (desc == null) ? "" : desc;
+    }
+
+    public double getDiscountModifier() {
+        return this.discountModifier;
+    }
+
+    public void setDiscountModifier(double modifier) {
+        if (modifier < 0.0 || modifier > 3.0) throw new IllegalArgumentException("Discount modifier must be between 0.0 and 3.0");
+        this.discountModifier = modifier;
     }
 
     @Override

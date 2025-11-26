@@ -34,6 +34,7 @@ public class View extends JFrame implements ActionListener{
     private JMenu options;
     private JMenuItem saveButton;
     private JMenuItem backButton;
+    private JMenuItem homeButton;
     
     
     public View(Controller controller){
@@ -53,15 +54,18 @@ public class View extends JFrame implements ActionListener{
         this.setBounds(50, 50, 1200, 800);
         this.setDefaultCloseOperation(1);
         
-        menu = new JMenuBar();
-        options = new JMenu("Options");
-        saveButton = new JMenuItem("Save");
-        backButton = new JMenuItem("Back");
-        saveButton.addActionListener(this);
-        backButton.addActionListener(this);
-        options.add(saveButton);
-        options.add(backButton);
-        menu.add(options);
+        this.menu = new JMenuBar();
+        this.options = new JMenu("Options");
+        this.saveButton = new JMenuItem("Save");
+        this.backButton = new JMenuItem("Back");
+        this.homeButton = new JMenuItem("Home");
+        this.saveButton.addActionListener(this);
+        this.backButton.addActionListener(this);
+        this.homeButton.addActionListener(this);
+        this.options.add(saveButton);
+        this.options.add(backButton);
+        this.options.add(homeButton);
+        this.menu.add(options);
         this.setJMenuBar(menu);
 
         this.setVisible(true);
@@ -74,7 +78,11 @@ public class View extends JFrame implements ActionListener{
             this.controller.save();
         }
         if (source == this.backButton){
-            
+            System.out.println("Back button pressed");
+            this.controller.back();
+        }
+        if (source == this.homeButton){
+            this.controller.displayPage(6);
         }
     }
 
