@@ -109,17 +109,23 @@ public class SearchPageGUI extends JPanel{
         if ("Guest".equals(searchType)) {
             addSearchField("First Name:", gbc, 0);
             addSearchField("Last Name:", gbc, 1);
-            addSearchField("Phone:", gbc, 2);
+            addSearchField("Phone Number:", gbc, 2);
             addSearchField("Email:", gbc, 3);
         } else if ("Stay".equals(searchType)) {
             addSearchField("Guest ID:", gbc, 0);
             addSearchField("Check-in Date (M/D/YYYY):", gbc, 1);
             addSearchField("Check-out Date (M/D/YYYY):", gbc, 2);
             addSearchField("Price:", gbc, 3);
+            addSearchField("Location: (1 Lodge, 2 Bunkhouse)", gbc, 4);
+
         } else if ("Issue".equals(searchType)) {
             addSearchField("Title:", gbc, 0);
             addSearchField("Stay ID:", gbc, 1);
             addSearchField("Description:", gbc, 2);
+            addSearchField("Reported Date (M/D/YYYY):", gbc, 3);
+            addSearchField("Started Date (M/D/YYYY):", gbc, 4);
+            addSearchField("Resolved Date (M/D/YYYY):", gbc, 5);
+
         }
 
         searchCriteriaPanel.revalidate();
@@ -161,14 +167,14 @@ public class SearchPageGUI extends JPanel{
     public void displayGuestResults(ArrayList<Guest> guests){
         tableModel.setRowCount(0);
         tableModel.setColumnCount(0);
-        tableModel.addColumn("ID");
+        //tableModel.addColumn("ID");
         tableModel.addColumn("First Name");
         tableModel.addColumn("Last Name");
         tableModel.addColumn("Phone");
         tableModel.addColumn("Email");
 
         for (Guest guest : guests) {
-            Object[] row = {guest.getId(), guest.getFirstName(), guest.getLastName(), guest.getPhoneNumber(), guest.getEmail()};
+            Object[] row = {/*guest.getId(), */guest.getFirstName(), guest.getLastName(), guest.getPhoneNumber(), guest.getEmail()};
             tableModel.addRow(row);
         }
     }
@@ -176,30 +182,35 @@ public class SearchPageGUI extends JPanel{
     public void displayStayResults(ArrayList<Stay> stays){
         tableModel.setRowCount(0);
         tableModel.setColumnCount(0);
-        tableModel.addColumn("ID");
-        tableModel.addColumn("Guest ID");
+        //tableModel.addColumn("ID");
+        //tableModel.addColumn("Guest ID");
         tableModel.addColumn("Check-in");
         tableModel.addColumn("Check-out");
         tableModel.addColumn("Price");
+        tableModel.addColumn("Location");
 
         for (Stay stay : stays) {
-            Object[] row = {stay.getId(), stay.getParentGuestId(), 
-                           arrayToString(stay.getStartDate()), arrayToString(stay.getEndDate()), stay.getPrice()};
+            Object[] row = {/*stay.getId(), stay.getParentGuestId(),*/ 
+                           arrayToString(stay.getStartDate()), arrayToString(stay.getEndDate()), stay.getPrice(), stay.getLocation()};
             tableModel.addRow(row);
         }
     }
 
+    //fix   
     public void displayIssueResults(ArrayList<Issue> issues){
         tableModel.setRowCount(0);
         tableModel.setColumnCount(0);
-        tableModel.addColumn("ID");
+        //tableModel.addColumn("ID");
         tableModel.addColumn("Title");
         tableModel.addColumn("Description");
-        tableModel.addColumn("Stay ID");
+        tableModel.addColumn("Reported Date");
+        tableModel.addColumn("Started Date");
+        tableModel.addColumn("Resolved Date");
+        //tableModel.addColumn("Stay ID");
 
         for (Issue issue : issues) {
-            Object[] row = {issue.getId(), issue.getTitle(), issue.getDescription(), 
-                           issue.getParentStayId()};
+            Object[] row = {/*issue.getId(),*/ issue.getTitle(), issue.getDescription(), arrayToString(issue.getReportedDate()), arrayToString(issue.getStartedDate()), 
+                arrayToString(issue.getResolvedDate()), /*issue.getParentStayId()*/};
             tableModel.addRow(row);
         }
     }

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestDataGenerator",
+            "request": "launch",
+            "mainClass": "TestDataGenerator",
+            "projectName": "Lava Property Manager_a31224ce"
+        },
+        {
+            "type": "java",
             "name": "App",
             "request": "launch",
             "mainClass": "App",

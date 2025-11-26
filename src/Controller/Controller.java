@@ -65,6 +65,12 @@ public class Controller {
                 view.repaint();
                 break;
             case 7:
+                view.getContentPane().add(this.issuesPageGUI, BorderLayout.CENTER);
+                this.issuesPageGUI.start();
+                view.revalidate();
+                view.repaint();
+                break;
+            case 9:
                 view.getContentPane().add(this.searchPageGUI, BorderLayout.CENTER);
                 this.searchPageGUI.start();
                 view.revalidate();
@@ -100,8 +106,7 @@ public class Controller {
     }
 
     public void searchGuests(ArrayList<String> searchTerms){
-        ArrayList<Guest> results = model.searchGuests(searchTerms.get(0), searchTerms.get(1), 
-                                                      searchTerms.get(2), searchTerms.get(3));
+        ArrayList<Guest> results = model.searchGuests(searchTerms);
         searchPageGUI.displayGuestResults(results);
     }
 
@@ -139,6 +144,9 @@ public class Controller {
         this.createPageGUI = createPageGUI;
     }
 
+    public ArrayList<Issue> getAllIssues() {
+        return model.getAllIssues();
+    }
     public void setHomePageGUI(HomePageGUI homePageGUI){
         this.homePageGUI = homePageGUI;
     }
@@ -168,7 +176,11 @@ public class Controller {
     }
 
     public void start(){
+<<<<<<< HEAD
         this.displayPage(4);
+=======
+        this.displayPage(9);
+>>>>>>> 7463ec444d1ecf0cf0ae3c489f082941872901db
     }
 
     public void pack(){

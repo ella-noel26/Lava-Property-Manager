@@ -106,6 +106,9 @@ public class Model {
         stayIdCounter++;
     }
     
+    public ArrayList<Issue> getAllIssues() {
+        return new ArrayList<>(issueMap.values());
+    }
     public void addIssue(Issue issue, int stayId) {
         issue.setId(issueIdCounter);
         issue.setParentStayId(stayId);
@@ -145,21 +148,27 @@ public class Model {
         return stayIssues;
     }
 
-    public ArrayList<Guest> searchGuests(String firstName, String lastName, String phone, String email){
+
+    public ArrayList<Guest> searchGuests(ArrayList<String> searchTerms){
         ArrayList<Guest> results = new ArrayList<>();
+        String guestFirstName = searchTerms.get(0);
+        String guestLastName = searchTerms.get(1);
+        String guestPhoneNumber = searchTerms.get(2);
+        String guestEmail = searchTerms.get(3);
+
         for (Guest guest : guestMap.values()) {
             boolean matches = true;
             
-            if (!firstName.isEmpty() && !guest.getFirstName().toLowerCase().contains(firstName.toLowerCase())) {
+            if (!guestFirstName.isEmpty() && !guest.getFirstName().toLowerCase().contains(guestFirstName.toLowerCase())) {
                 matches = false;
             }
-            if (!lastName.isEmpty() && !guest.getLastName().toLowerCase().contains(lastName.toLowerCase())) {
+            if (!guestLastName.isEmpty() && !guest.getLastName().toLowerCase().contains(guestLastName.toLowerCase())) {
                 matches = false;
             }
-            if (!phone.isEmpty() && !String.valueOf(guest.getPhoneNumber()).contains(phone)) {
+            if (!guestPhoneNumber.isEmpty() && !String.valueOf(guest.getPhoneNumber()).contains(guestPhoneNumber)) {
                 matches = false;
             }
-            if (!email.isEmpty() && !guest.getEmail().toLowerCase().contains(email.toLowerCase())) {
+            if (!guestEmail.isEmpty() && !guest.getEmail().toLowerCase().contains(guestEmail.toLowerCase())) {
                 matches = false;
             }
             
@@ -176,6 +185,7 @@ public class Model {
         String checkInStr = searchTerms.get(1);
         String checkOutStr = searchTerms.get(2);
         String priceStr = searchTerms.get(3);
+        String locationStr = searchTerms.get(4);
         
         for (Stay stay : stayMap.values()) {
             boolean matches = true;
@@ -192,6 +202,9 @@ public class Model {
             if (!priceStr.isEmpty() && !String.valueOf(stay.getPrice()).contains(priceStr)) {
                 matches = false;
             }
+            if (!locationStr.isEmpty() && !String.valueOf(stay.getLocation()).contains(locationStr)) {
+                matches = false;
+            }
             
             if (matches) {
                 results.add(stay);
@@ -205,6 +218,9 @@ public class Model {
         String title = searchTerms.get(0);
         String stayId = searchTerms.get(1);
         String description = searchTerms.get(2);
+        String reportedDateStr = searchTerms.get(3);
+        String startedDateStr = searchTerms.get(4);
+        String resolvedDateStr = searchTerms.get(5);
         
         for (Issue issue : issueMap.values()) {
             boolean matches = true;
@@ -218,6 +234,15 @@ public class Model {
             if (!description.isEmpty() && !issue.getDescription().toLowerCase().contains(description.toLowerCase())) {
                 matches = false;
             }
+            if (!reportedDateStr.isEmpty() && !dateToString(issue.getReportedDate()).contains(reportedDateStr)) {
+                matches = false;
+            }
+            if (!startedDateStr.isEmpty() && !dateToString(issue.getStartedDate()).contains(startedDateStr)) {
+                matches = false;
+            }
+            if (!resolvedDateStr.isEmpty() && !dateToString(issue.getResolvedDate()).contains(resolvedDateStr)) {
+                matches = false;
+            }
             
             if (matches) {
                 results.add(issue);
@@ -229,6 +254,32 @@ public class Model {
     private String dateToString(int[] date){
         return date[0] + "/" + date[1] + "/" + date[2];
     }
+    public void populateSampleData() {
+        // Guests
+        Guest g1 = new Guest("Ella", "Frandsen", 3852991133L, "ella@example.com");
+        addGuest(g1);
+        Guest g2 = new Guest("Jerry", "Zheng", 3852991100L, "jerry@example.com");
+        addGuest(g2);
+
+        // Stays
+        Stay s1 = new Stay(new int[]{2,20,2024}, new int[]{2,22,2024}, 500.50, 1);
+        addStay(s1, g1.getId());
+        Stay s2 = new Stay(new int[]{3,10,2024}, new int[]{3,12,2024}, 200.00, 2);
+        addStay(s2, g2.getId());
+
+        // Issues (one unresolved, one resolved)
+        Issue i1 = new Issue("Toilet Broken", new int[]{5,17,2015}, new int[]{5,15,2015}, "Toilet won't flush");
+        addIssue(i1, s1.getId());
+        Issue i2 = new Issue("Light Out", new int[]{6,1,2025}, new int[]{6,2,2025}, new int[]{6,5,2025}, "Electrician fixed it");
+        addIssue(i2, s2.getId());
+
+        // Add a couple more to exercise search sorting
+        Issue i3 = new Issue("No Hot Water", new int[]{10,10,2024}, new int[]{10,11,2024}, "Boiler issue");
+        addIssue(i3, s1.getId());
+
+        // Persist
+        saveData();
+    }   
 }
 /*package Model;
 import com.google.gson.Gson;
