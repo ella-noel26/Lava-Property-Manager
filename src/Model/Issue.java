@@ -1,4 +1,5 @@
 package Model;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Issue implements Comparable<Issue>{
@@ -36,6 +37,36 @@ public class Issue implements Comparable<Issue>{
             this.resolvedDate[index] = resolveDate[index];
         }
 
+    }
+
+    public LocalDate getReportedLocalDate() {
+        if (reportedDate == null || reportedDate.length < 3) return null;
+        return LocalDate.of(reportedDate[2], reportedDate[0], reportedDate[1]);
+    }
+
+    public LocalDate getStartedLocalDate() {
+        if (startedDate == null || startedDate.length < 3) return null;
+        return LocalDate.of(startedDate[2], startedDate[0], startedDate[1]);
+    }
+
+    public LocalDate getResolvedLocalDate() {
+        if (resolvedDate == null || resolvedDate.length < 3) return null;
+        return LocalDate.of(resolvedDate[2], resolvedDate[0], resolvedDate[1]);
+    }
+
+    public void setReportedLocalDate(LocalDate d){
+        if (d == null) return;
+        this.reportedDate = new int[]{d.getMonthValue(), d.getDayOfMonth(), d.getYear()};
+    }
+
+    public void setStartedLocalDate(LocalDate d){
+        if (d == null) return;
+        this.startedDate = new int[]{d.getMonthValue(), d.getDayOfMonth(), d.getYear()};
+    }
+
+    public void setResolvedLocalDate(LocalDate d){
+        if (d == null) { this.resolvedDate = null; return; }
+        this.resolvedDate = new int[]{d.getMonthValue(), d.getDayOfMonth(), d.getYear()};
     }
 
     public void setId(int id) {

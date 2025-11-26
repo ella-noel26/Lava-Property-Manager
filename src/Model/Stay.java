@@ -1,4 +1,5 @@
 package Model;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Stay implements Comparable<Stay>{
@@ -26,6 +27,31 @@ public class Stay implements Comparable<Stay>{
         this.location = place;
         this.childIssueIds = new ArrayList<>();
 
+    }
+
+    public LocalDate getStartLocalDate() {
+        if (this.startDate == null || this.startDate.length < 3){
+            return null;
+        }
+        // stored as [month, day, year]
+        return LocalDate.of(this.startDate[2], this.startDate[0], this.startDate[1]);
+    }
+
+    public LocalDate getEndLocalDate() {
+        if (this.endDate == null || this.endDate.length < 3){
+
+        return null;}
+        return LocalDate.of(this.endDate[2], this.endDate[0], this.endDate[1]);
+    }
+
+    // Check whether a LocalDate falls inside this stay (inclusive)
+    public boolean includesDate(LocalDate date) {
+        LocalDate start = getStartLocalDate();
+        LocalDate end = getEndLocalDate();
+        if (start == null || end == null || date == null){
+            return false;
+        } 
+        return !(date.isBefore(start) || date.isAfter(end));
     }
 
     public void setId(int id) {
@@ -94,7 +120,32 @@ public class Stay implements Comparable<Stay>{
         this.location = place;
     }
 
+    
     @Override
+    public int compareTo(Stay other) {
+        java.time.LocalDate aStart = this.getStartLocalDate();
+        java.time.LocalDate bStart = other.getStartLocalDate();
+        if (aStart != null && bStart != null) {
+            int cmp = aStart.compareTo(bStart);
+            if (cmp != 0) return cmp;
+        } else if (aStart == null && bStart != null) return -1;
+        else if (aStart != null && bStart == null) return 1;
+
+        java.time.LocalDate aEnd = this.getEndLocalDate();
+        java.time.LocalDate bEnd = other.getEndLocalDate();
+        if (aEnd != null && bEnd != null) {
+            int cmp = aEnd.compareTo(bEnd);
+            if (cmp != 0) return cmp;
+        } else if (aEnd == null && bEnd != null) return -1;
+        else if (aEnd != null && bEnd == null) return 1;
+
+        int cmpLoc = Integer.compare(this.getLocation(), other.getLocation());
+        if (cmpLoc != 0) return cmpLoc;
+
+        return Double.compare(this.getPrice(), other.getPrice());
+    }
+    
+    /*@Override
     public int compareTo(Stay other){
         if (this.getStartDate()[2] != other.getStartDate()[2]){
             return this.getStartDate()[2] - other.getStartDate()[2];
@@ -123,5 +174,7 @@ public class Stay implements Comparable<Stay>{
         else{
             return 0;
         }
-    }
+    }*/
+
+
 }

@@ -11,4 +11,7 @@ public class StayPageGUI extends JPanel{
     public StayPageGUI(Controller controller){
         this.controller = controller;
     }
+    public void start(){
+        
+    }
 }

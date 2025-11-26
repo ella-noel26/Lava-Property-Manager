@@ -1,5 +1,6 @@
 package Controller;
 import java.awt.BorderLayout;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -72,6 +73,32 @@ public class Controller {
         }
     }
 
+    public ArrayList<Stay> getStaysOnDate(LocalDate date){
+        return model.getStaysOnDate(date);
+    }
+
+    /**
+     * Open the stay page for a specific stay id.
+     * If StayPageGUI provides a specific 'showStay(Stay)' method it will be invoked.
+     * This prepares the app for clicking a date in the calendar and navigating to the stay.
+     */
+    public void openStayPage(int stayId){
+        Stay stay = model.getStayById(stayId);
+        if (stay == null) return;
+        // show stay page (best-effort)
+        view.getContentPane().removeAll();
+        if (this.stayPageGUI != null) {
+            view.getContentPane().add(this.stayPageGUI, BorderLayout.CENTER);
+            this.stayPageGUI.start();
+            // try to call showStay(Stay) if implemented
+            try {
+                this.stayPageGUI.getClass().getMethod("showStay", Stay.class).invoke(this.stayPageGUI, stay);
+            } catch (Exception ignored) {}
+        }
+        view.revalidate();
+        view.repaint();
+    }
+
     public void searchGuests(ArrayList<String> searchTerms){
         ArrayList<Guest> results = model.searchGuests(searchTerms.get(0), searchTerms.get(1), 
                                                       searchTerms.get(2), searchTerms.get(3));
@@ -141,7 +168,7 @@ public class Controller {
     }
 
     public void start(){
-        this.displayPage(7);
+        this.displayPage(4);
     }
 
     public void pack(){

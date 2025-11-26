@@ -3,6 +3,7 @@ import com.google.gson.Gson;
 import Controller.Controller;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +55,31 @@ public class Model {
             this.stayIdCounter = 1;
             this.issueIdCounter = 1;
         }
+    }
+
+    public ArrayList<Stay> getStaysOnDate(LocalDate date) {
+        ArrayList<Stay> results = new ArrayList<>();
+        if (date == null) return results;
+        for (Stay stay : stayMap.values()) {
+            if (stay != null && stay.includesDate(date)) {
+                results.add(stay);
+            }
+        }
+        return results;
+    }
+
+    public boolean isLodgeBookedOn(LocalDate date) {
+        for (Stay s : stayMap.values()) {
+            if (s != null && s.includesDate(date) && s.getLocation() == 1) return true;
+        }
+        return false;
+    }
+
+    public boolean isBunkhouseBookedOn(LocalDate date) {
+        for (Stay s : stayMap.values()) {
+            if (s != null && s.includesDate(date) && s.getLocation() == 2) return true;
+        }
+        return false;
     }
 
     public void saveData(){
