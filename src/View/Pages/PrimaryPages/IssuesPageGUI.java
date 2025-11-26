@@ -50,7 +50,7 @@ public class IssuesPageGUI extends JPanel {
         // LEFT: Open / active issues
         JPanel left = new JPanel(new BorderLayout(4, 4));
         left.setBorder(BorderFactory.createTitledBorder("Open Issues"));
-        openTableModel = new DefaultTableModel(new Object[] { "Reported", "Started", "Description" }, 0) {
+        openTableModel = new DefaultTableModel(new Object[] { "Reported", "Started", "Description", "Reported By" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
@@ -72,7 +72,7 @@ public class IssuesPageGUI extends JPanel {
         // RIGHT: Resolved issues
         JPanel right = new JPanel(new BorderLayout(4, 4));
         right.setBorder(BorderFactory.createTitledBorder("Resolved Issues"));
-        resolvedTableModel = new DefaultTableModel(new Object[] { "Reported", "Description" }, 0) {
+        resolvedTableModel = new DefaultTableModel(new Object[] { "Reported", "Description", "Reported By" }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
@@ -133,14 +133,16 @@ public class IssuesPageGUI extends JPanel {
             String reported = formatDate(iss.getReportedDate());
             String started = formatDate(iss.getStartedDate());
             String desc = safeString(iss.getDescription());
-            openTableModel.addRow(new Object[] { reported, started, desc });
+            String reporter = getReporterNameForIssue(iss);
+            openTableModel.addRow(new Object[] { reported, started, desc, reporter });
         }
 
         // Populate resolved table: Reported, Description
         for (Issue iss : resolvedIssues) {
             String reported = formatDate(iss.getReportedDate());
             String desc = safeString(iss.getDescription());
-            resolvedTableModel.addRow(new Object[] { reported, desc });
+            String reporter = getReporterNameForIssue(iss);
+            resolvedTableModel.addRow(new Object[] { reported, desc, reporter });
         }
     }
 
@@ -158,5 +160,18 @@ public class IssuesPageGUI extends JPanel {
     // Called by controller when this page is displayed
     public void start() {
         refresh();
+    }
+
+    private String getReporterNameForIssue(Issue iss) {
+        if (iss == null) return "";
+        int stayId = iss.getParentStayId();
+        Model.Stay stay = controller.getModel().getStayById(stayId);
+        if (stay == null) return "";
+        int guestId = stay.getParentGuestId();
+        Model.Guest guest = controller.getModel().getGuestById(guestId);
+        if (guest == null) return "";
+        String fn = safeString(guest.getFirstName());
+        String ln = safeString(guest.getLastName());
+        return (fn + " " + ln).trim();
     }
 }

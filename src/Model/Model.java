@@ -193,45 +193,60 @@ public class Model {
 
     public ArrayList<Guest> searchGuests(ArrayList<String> searchTerms){
         ArrayList<Guest> results = new ArrayList<>();
-        String guestFirstName = searchTerms.get(0);
-        String guestLastName = searchTerms.get(1);
-        String guestPhoneNumber = searchTerms.get(2);
-        String guestEmail = searchTerms.get(3);
+        String idStr = safeIdx(searchTerms, 0);
+        String firstName = safeIdx(searchTerms, 1);
+        String lastName = safeIdx(searchTerms, 2);
+        String phoneNumber = safeIdx(searchTerms, 3);
+        String email = safeIdx(searchTerms, 4);
+        String childStayIdStr = safeIdx(searchTerms, 5);
 
         for (Guest guest : guestMap.values()) {
             boolean matches = true;
-            
-            if (!guestFirstName.isEmpty() && !guest.getFirstName().toLowerCase().contains(guestFirstName.toLowerCase())) {
+
+            if (!idStr.isEmpty() && !String.valueOf(guest.getId()).contains(idStr)) {
                 matches = false;
             }
-            if (!guestLastName.isEmpty() && !guest.getLastName().toLowerCase().contains(guestLastName.toLowerCase())) {
+            if (!firstName.isEmpty() && !guest.getFirstName().toLowerCase().contains(firstName.toLowerCase())) {
                 matches = false;
             }
-            if (!guestPhoneNumber.isEmpty() && !String.valueOf(guest.getPhoneNumber()).contains(guestPhoneNumber)) {
+            if (!lastName.isEmpty() && !guest.getLastName().toLowerCase().contains(lastName.toLowerCase())) {
                 matches = false;
             }
-            if (!guestEmail.isEmpty() && !guest.getEmail().toLowerCase().contains(guestEmail.toLowerCase())) {
+            if (!phoneNumber.isEmpty() && !String.valueOf(guest.getPhoneNumber()).contains(phoneNumber)) {
                 matches = false;
             }
-            
-            if (matches) {
-                results.add(guest);
+            if (!email.isEmpty() && !guest.getEmail().toLowerCase().contains(email.toLowerCase())) {
+                matches = false;
             }
+            if (!childStayIdStr.isEmpty()) {
+                boolean hasChild = false;
+                for (Integer sid : guest.getChildStays()) {
+                    if (String.valueOf(sid).contains(childStayIdStr)) { hasChild = true; break; }
+                }
+                if (!hasChild) matches = false;
+            }
+
+            if (matches) results.add(guest);
         }
         return results;
     }
 
     public ArrayList<Stay> searchStays(ArrayList<String> searchTerms){
         ArrayList<Stay> results = new ArrayList<>();
-        String guestIdStr = searchTerms.get(0);
-        String checkInStr = searchTerms.get(1);
-        String checkOutStr = searchTerms.get(2);
-        String priceStr = searchTerms.get(3);
-        String locationStr = searchTerms.get(4);
+        String idStr = safeIdx(searchTerms, 0);
+        String guestIdStr = safeIdx(searchTerms, 1);
+        String checkInStr = safeIdx(searchTerms, 2);
+        String checkOutStr = safeIdx(searchTerms, 3);
+        String priceStr = safeIdx(searchTerms, 4);
+        String locationStr = safeIdx(searchTerms, 5);
+        String childIssueIdStr = safeIdx(searchTerms, 6);
         
         for (Stay stay : stayMap.values()) {
             boolean matches = true;
             
+            if (!idStr.isEmpty() && !String.valueOf(stay.getId()).contains(idStr)) {
+                matches = false;
+            }
             if (!guestIdStr.isEmpty() && !String.valueOf(stay.getParentGuestId()).contains(guestIdStr)) {
                 matches = false;
             }
@@ -247,6 +262,13 @@ public class Model {
             if (!locationStr.isEmpty() && !String.valueOf(stay.getLocation()).contains(locationStr)) {
                 matches = false;
             }
+            if (!childIssueIdStr.isEmpty()) {
+                boolean hasChild = false;
+                for (Integer iid : stay.getChildIssueIds()) {
+                    if (String.valueOf(iid).contains(childIssueIdStr)) { hasChild = true; break; }
+                }
+                if (!hasChild) matches = false;
+            }
             
             if (matches) {
                 results.add(stay);
@@ -257,16 +279,20 @@ public class Model {
 
     public ArrayList<Issue> searchIssues(ArrayList<String> searchTerms){
         ArrayList<Issue> results = new ArrayList<>();
-        String title = searchTerms.get(0);
-        String stayId = searchTerms.get(1);
-        String description = searchTerms.get(2);
-        String reportedDateStr = searchTerms.get(3);
-        String startedDateStr = searchTerms.get(4);
-        String resolvedDateStr = searchTerms.get(5);
+        String idStr = safeIdx(searchTerms, 0);
+        String title = safeIdx(searchTerms, 1);
+        String stayId = safeIdx(searchTerms, 2);
+        String description = safeIdx(searchTerms, 3);
+        String reportedDateStr = safeIdx(searchTerms, 4);
+        String startedDateStr = safeIdx(searchTerms, 5);
+        String resolvedDateStr = safeIdx(searchTerms, 6);
         
         for (Issue issue : issueMap.values()) {
             boolean matches = true;
             
+            if (!idStr.isEmpty() && !String.valueOf(issue.getId()).contains(idStr)) {
+                matches = false;
+            }
             if (!title.isEmpty() && !issue.getTitle().toLowerCase().contains(title.toLowerCase())) {
                 matches = false;
             }
@@ -295,6 +321,13 @@ public class Model {
 
     private String dateToString(int[] date){
         return date[0] + "/" + date[1] + "/" + date[2];
+    }
+
+    private String safeIdx(ArrayList<String> list, int idx){
+        if (list == null) return "";
+        if (idx < 0 || idx >= list.size()) return "";
+        String s = list.get(idx);
+        return s == null ? "" : s;
     }
     public void populateSampleData() {
         // Guests

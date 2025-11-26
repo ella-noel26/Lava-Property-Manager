@@ -149,23 +149,28 @@ public class SearchPageGUI extends JPanel{
         gbc.weightx = 1.0;
 
         if ("Guest".equals(currentSearchType)) {
-            addSearchField("First Name:", gbc, 0);
-            addSearchField("Last Name:", gbc, 1);
-            addSearchField("Phone:", gbc, 2);
-            addSearchField("Email:", gbc, 3);
-        } else if ("Stay".equals(currentSearchType)) {
             addSearchField("Guest ID:", gbc, 0);
-            addSearchField("Check-in Date (M/D/YYYY):", gbc, 1);
-            addSearchField("Check-out Date (M/D/YYYY):", gbc, 2);
-            addSearchField("Price:", gbc, 3);
-            addSearchField("Location (1 Lodge, 2 Bunkhouse):", gbc, 4);
+            addSearchField("First Name:", gbc, 1);
+            addSearchField("Last Name:", gbc, 2);
+            addSearchField("Phone:", gbc, 3);
+            addSearchField("Email:", gbc, 4);
+            addSearchField("Child Stay ID:", gbc, 5);
+        } else if ("Stay".equals(currentSearchType)) {
+            addSearchField("Stay ID:", gbc, 0);
+            addSearchField("Guest ID (Parent):", gbc, 1);
+            addSearchField("Check-in Date (M/D/YYYY):", gbc, 2);
+            addSearchField("Check-out Date (M/D/YYYY):", gbc, 3);
+            addSearchField("Price:", gbc, 4);
+            addSearchField("Location (1 Lodge, 2 Bunkhouse):", gbc, 5);
+            addSearchField("Child Issue ID:", gbc, 6);
         } else if ("Issue".equals(currentSearchType)) {
-            addSearchField("Title:", gbc, 0);
-            addSearchField("Stay ID:", gbc, 1);
-            addSearchField("Description:", gbc, 2);
-            addSearchField("Reported Date (M/D/YYYY):", gbc, 3);
-            addSearchField("Started Date (M/D/YYYY):", gbc, 4);
-            addSearchField("Resolved Date (M/D/YYYY):", gbc, 5);
+            addSearchField("Issue ID:", gbc, 0);
+            addSearchField("Title:", gbc, 1);
+            addSearchField("Stay ID (Parent):", gbc, 2);
+            addSearchField("Description:", gbc, 3);
+            addSearchField("Reported Date (M/D/YYYY):", gbc, 4);
+            addSearchField("Started Date (M/D/YYYY):", gbc, 5);
+            addSearchField("Resolved Date (M/D/YYYY):", gbc, 6);
         }
 
         // Clear previous results when switching types
@@ -276,5 +281,22 @@ public class SearchPageGUI extends JPanel{
     private String arrayToString(int[] date){
         if (date == null || date.length < 3) return "";
         return date[0] + "/" + date[1] + "/" + date[2];
+    }
+
+    public void restoreSearch(String searchType, ArrayList<String> searchTerms){
+        // Set the search type combo
+        searchTypeCombo.setSelectedItem(searchType);
+        currentSearchType = searchType;
+        updateSearchCriteria();
+        
+        // Populate search fields
+        if (searchTerms != null) {
+            for (int i = 0; i < Math.min(searchTerms.size(), searchFields.size()); i++) {
+                searchFields.get(i).setText(searchTerms.get(i));
+            }
+        }
+        
+        // Re-run the search to restore results
+        performSearch();
     }
 }

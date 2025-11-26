@@ -422,14 +422,38 @@ public class CreatePageGUI extends JPanel {
         int guestId = Integer.parseInt(guestIdStr);
         int[] inDate = parseDate(in);
         int[] outDate = parseDate(out);
-        double price = priceStr.isEmpty() ? 0.0 : Double.parseDouble(priceStr);
+        // Auto-calculate price if empty, or always recalc per requirement
+        double price;
         int loc = locStr.isEmpty() ? 1 : Integer.parseInt(locStr);
+
+        price = calculateStayPrice(guestId, loc, inDate, outDate);
+        // If user provided a price explicitly, we keep auto-calculated unless they need override
+        if (!priceStr.isEmpty()) {
+            try { price = Double.parseDouble(priceStr); } catch (NumberFormatException ignored) {}
+        }
 
         Stay s = new Stay(inDate, outDate, price, loc);
         controller.getModel().addStay(s, guestId);
         // link stay to guest if guest exists
         Guest g = controller.getModel().getGuestById(guestId);
         if (g != null) g.addChildStayId(s.getId());
+    }
+
+    private double calculateStayPrice(int guestId, int location, int[] startDate, int[] endDate){
+        // per-night base
+        double perNight = (location == 2) ? 700.0 : 600.0; // 2=bunkhouse, 1=lodge
+        // nights calculation using LocalDate
+        LocalDate start = LocalDate.of(startDate[2], startDate[0], startDate[1]);
+        LocalDate end = LocalDate.of(endDate[2], endDate[0], endDate[1]);
+        long nights = java.time.temporal.ChronoUnit.DAYS.between(start, end);
+        if (nights < 1) nights = 1; // minimum 1 night
+        double base = perNight * nights;
+        Guest g = controller.getModel().getGuestById(guestId);
+        if (g != null) {
+            double mod = g.getDiscountModifier();
+            if (mod != 0.0) base = base * mod;
+        }
+        return base;
     }
 
     private void createIssue(){
