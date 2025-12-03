@@ -1,9 +1,9 @@
 package Controller;
+
 import java.awt.BorderLayout;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Stack;
-
 import Model.Model;
 import Model.Stay;
 import Model.Guest;
@@ -31,7 +31,7 @@ public class Controller {
     private RatingsPageGUI ratingsPageGUI;
     private SearchPageGUI searchPageGUI;
     private Model model;
-    Stack<CurrentPage> pageStack;
+    private Stack<CurrentPage> pageStack;
 
     public Controller(){
         this.pageStack = new Stack<>();
@@ -137,7 +137,7 @@ public class Controller {
         return model.getLowestRatedGuests(limit);
     }
 
-        public void updateGuest(Guest g){
+    public void updateGuest(Guest g){
         model.updateGuest(g);
     }
 

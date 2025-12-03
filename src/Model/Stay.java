@@ -156,37 +156,4 @@ public class Stay implements Comparable<Stay>{
 
         return Double.compare(this.getPrice(), other.getPrice());
     }
-    
-    /*@Override
-    public int compareTo(Stay other){
-        if (this.getStartDate()[2] != other.getStartDate()[2]){
-            return this.getStartDate()[2] - other.getStartDate()[2];
-        }
-        else if (this.getStartDate()[0] != other.getStartDate()[0]){
-            return this.getStartDate()[0] - other.getStartDate()[0];
-        }
-        else if (this.getStartDate()[1] != other.getStartDate()[1]){
-            return this.getStartDate()[1] - other.getStartDate()[1];
-        }
-        else if (this.getEndDate()[2] != other.getEndDate()[2]){
-            return this.getEndDate()[2] - other.getEndDate()[2];
-        }
-        else if (this.getEndDate()[0] != other.getEndDate()[0]){
-            return this.getEndDate()[0] - other.getEndDate()[0];
-        }
-        else if (this.getEndDate()[1] != other.getEndDate()[1]){
-            return this.getEndDate()[1] - other.getEndDate()[1];
-        }
-        else if (this.getLocation() != other.getLocation()){
-            return this.getLocation() - other.getLocation();
-        }
-        else if(this.getPrice() != other.getPrice()){
-            return (int) (this.getPrice() - other.getPrice());
-        }
-        else{
-            return 0;
-        }
-    }*/
-
-
 }
