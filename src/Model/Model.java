@@ -1,6 +1,5 @@
 package Model;
 import com.google.gson.Gson;
-import Controller.Controller;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -10,7 +9,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Model {
-    private Controller controller;
     private HashMap<Integer, Guest> guestMap;
     private HashMap<Integer, Stay> stayMap;
     private HashMap<Integer, Issue> issueMap;
@@ -19,8 +17,7 @@ public class Model {
     private int stayIdCounter;
     private int issueIdCounter;
 
-    public Model(Controller controller){
-        this.controller = controller;
+    public Model(){
         this.guestMap = new HashMap<>();
         this.stayMap = new HashMap<>();
         this.issueMap = new HashMap<>();

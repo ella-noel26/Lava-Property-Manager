@@ -14,6 +14,7 @@ public class CalendarPageGUI extends JPanel {
     private YearMonth currentMonth;
     private JPanel gridPanel;
     private JLabel monthLabel;
+    private int filterMode = 0; // 0 = both, 1 = lodge only, 2 = bunkhouse only
 
     private final Color LODGE_COLOR = new Color(180, 126, 222);
     private final Color BUNK_COLOR = new Color(118, 215, 89);
@@ -47,6 +48,23 @@ public class CalendarPageGUI extends JPanel {
 
         gridPanel = new JPanel();
         this.add(new JScrollPane(gridPanel), BorderLayout.CENTER);
+
+        // Bottom filter buttons
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        filterPanel.setBackground(Color.WHITE);
+        
+        JButton bothBtn = new JButton("Both");
+        JButton lodgeBtn = new JButton("Lodge Only");
+        JButton bunkBtn = new JButton("Bunkhouse Only");
+        
+        bothBtn.addActionListener(e -> { filterMode = 0; buildCalendar(); });
+        lodgeBtn.addActionListener(e -> { filterMode = 1; buildCalendar(); });
+        bunkBtn.addActionListener(e -> { filterMode = 2; buildCalendar(); });
+        
+        filterPanel.add(bothBtn);
+        filterPanel.add(lodgeBtn);
+        filterPanel.add(bunkBtn);
+        this.add(filterPanel, BorderLayout.SOUTH);
 
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -106,9 +124,22 @@ public class CalendarPageGUI extends JPanel {
                     if (s.getLocation() == 1) lodge = true;
                     if (s.getLocation() == 2) bunk = true;
                 }
-                if (lodge && bunk) dayBtn.setBackground(BOTH_COLOR);
-                else if (lodge) dayBtn.setBackground(LODGE_COLOR);
-                else if (bunk) dayBtn.setBackground(BUNK_COLOR);
+                
+                // Apply filter
+                boolean shouldHighlight = false;
+                if (filterMode == 0) {
+                    shouldHighlight = lodge || bunk;
+                } else if (filterMode == 1) {
+                    shouldHighlight = lodge;
+                } else if (filterMode == 2) {
+                    shouldHighlight = bunk;
+                }
+                
+                if (shouldHighlight) {
+                    if (lodge && bunk) dayBtn.setBackground(BOTH_COLOR);
+                    else if (lodge) dayBtn.setBackground(LODGE_COLOR);
+                    else if (bunk) dayBtn.setBackground(BUNK_COLOR);
+                }
 
                 LocalDate clicked = date;
                 dayBtn.addActionListener(ev -> {

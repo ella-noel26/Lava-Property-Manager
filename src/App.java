@@ -6,7 +6,7 @@ import View.View;
 public class App {
     public static void main(String[] args) throws Exception {
         Controller controller = new Controller();
-        Model model = new Model(controller);
+        Model model = new Model();
         View view = new View(controller);
         controller.setView(view);
         controller.setModel(model);
